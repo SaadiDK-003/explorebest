@@ -1,7 +1,7 @@
 <header class="d-flex align-items-center">
       <div class="container d-flex align-items-center justify-content-between">
             <a href="./" class="text-decoration-none">
-                  <h3 class="text-white"><?= env("TITLE") ?></h3>
+                  <h3 class="text-white mb-0"><?= env("TITLE") ?></h3>
             </a>
             <div class="buttons-wrapper d-flex gap-3">
                   <?php if (isLoggedIn()): ?>
