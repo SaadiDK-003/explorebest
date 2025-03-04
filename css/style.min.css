@@ -1,0 +1,1 @@
+:root{--bg-primary: rgb(14, 47, 62)}html{scroll-behavior:smooth}body{overflow-x:hidden}body header{background-color:var(--bg-primary);min-height:80px}body main{min-height:1000px}body footer{background-color:var(--bg-primary);min-height:80px}/*# sourceMappingURL=style.min.css.map */
