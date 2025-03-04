@@ -36,7 +36,7 @@ require_once 'core/database.php';
                                     </div>
                               </div>
                               <div class="col-12 col-md-6">
-                                    <div class="bg-img">
+                                    <div class="bg-img" data-title="<?= env("TITLE") ?>">
                                           <img src="./img/explore_bg.webp" alt="explore_bg">
                                     </div>
                               </div>
