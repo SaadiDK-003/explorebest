@@ -47,7 +47,9 @@ require_once 'core/database.php';
       <?php include_once 'includes/footer.php'; ?>
       <?php include_once 'includes/external_js.php'; ?>
       <script>
-            $(document).ready(function () { });
+            $(document).ready(function () {
+
+            });
       </script>
 </body>
 
