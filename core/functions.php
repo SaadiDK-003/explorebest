@@ -4,7 +4,6 @@ function isLoggedIn()
       return isset($_SESSION['user']) ? true : false;
 }
 
-
 function login($POST)
 {
       global $db;
@@ -60,4 +59,57 @@ function checkEmailExists($email)
       } else {
             return false;
       }
+}
+
+
+function checkCityExist($city)
+{
+      global $db;
+      $checkCityExist = $db->query("SELECT `city_name` FROM `cities` WHERE `city_name`='$city'");
+      if (mysqli_num_rows($checkCityExist) > 0) {
+            return true;
+      } else {
+            return false;
+      }
+}
+
+function cityList()
+{
+      global $db;
+      $cityQ = $db->query("CALL `get_cities`()");
+      while ($city = mysqli_fetch_object($cityQ)) {
+            ?>
+            <option value="<?= $city->id ?>"><?= $city->city_name ?></option>
+            <?php
+      }
+      $cityQ->close();
+      $db->next_result();
+}
+
+function addPlace($POST)
+{
+      global $db;
+
+      $keys = '';
+      $values = '';
+      $msg = '';
+
+      foreach ($POST as $key => $value) {
+            $keys .= $key . ',';
+            $values .= "'" . $value . "',";
+      }
+
+      $keys = substr($keys, 0, -1);
+      $values = substr($values, 0, -1);
+
+      try {
+            $placesQ = $db->query("INSERT INTO `places` ($keys) VALUES($values)");
+            if ($placesQ) {
+                  $msg = '<h5 class="alert alert-success text-center">Place Added Successfully.</h5>';
+            }
+      } catch (\Throwable $th) {
+            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 106.</h5>';
+      }
+
+      echo $msg;
 }
