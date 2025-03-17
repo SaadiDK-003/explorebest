@@ -3,3 +3,5 @@ css/*.map
 css/*.scss
 css/style.css
 info/
+img/place/*.png
+img/place/*.jpg

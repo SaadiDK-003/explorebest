@@ -86,10 +86,10 @@ function cityList()
       $db->next_result();
 }
 
-function addPlace($POST)
+function addPlace($POST, $FILE)
 {
       global $db;
-
+      $targetDir = '../img/';
       $keys = '';
       $values = '';
       $msg = '';

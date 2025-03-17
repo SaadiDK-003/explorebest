@@ -27,9 +27,9 @@ if ($userRole != 'local') {
             <div class="row">
                 <div class="col-12 col-md-6 mx-auto">
                     <?php if (isset($_POST['city_id']) && isset($_POST['type'])) {
-                        addPlace($_POST);
+                        addPlace($_POST, $_FILES);
                     } ?>
-                    <form action="" method="post">
+                    <form action="" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-12">
                                 <h1 class="text-center">Add A Place</h1>
@@ -53,10 +53,16 @@ if ($userRole != 'local') {
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-12 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="location" class="form-label">Location</label>
                                     <input type="text" name="location" id="location" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="img" class="form-label">img</label>
+                                    <input type="file" name="img" id="img" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-12 mb-3">
