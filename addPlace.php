@@ -25,6 +25,9 @@ if ($userRole != 'local') {
     <main>
         <div class="container my-5">
             <div class="row">
+                <div class="col-12 my-4 text-center">
+                    <a href="./localDashboard.php" class="btn btn-primary">Go Back</a>
+                </div>
                 <div class="col-12 col-md-6 mx-auto">
                     <?php if (isset($_POST['city_id']) && isset($_POST['type'])) {
                         addPlace($_POST, $_FILES);

@@ -25,6 +25,9 @@ if ($userRole != 'local') {
     <main>
         <div class="container my-5">
             <div class="row">
+                <div class="col-12 my-4 text-center">
+                    <a href="./localDashboard.php" class="btn btn-primary">Go Back</a>
+                </div>
                 <div class="col-12 col-md-6 mx-auto">
                     <?php if (isset($_POST['city_id']) && isset($_POST['type'])) {
                         addAccommodation($_POST, $_FILES);
@@ -32,7 +35,7 @@ if ($userRole != 'local') {
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-12">
-                                <h1 class="text-center">Add A Place</h1>
+                                <h1 class="text-center">Add Accommodation</h1>
                             </div>
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
@@ -48,8 +51,9 @@ if ($userRole != 'local') {
                                     <label for="type" class="form-label">Type</label>
                                     <select name="type" id="type" class="form-select" required>
                                         <option value="" selected hidden>Select Type</option>
-                                        <option value="restaurant">Restaurant</option>
-                                        <option value="cafe">Cafe</option>
+                                        <option value="apartment">Apartment</option>
+                                        <option value="hotel">Hotel</option>
+                                        <option value="chalet">Chalet</option>
                                     </select>
                                 </div>
                             </div>
@@ -61,21 +65,19 @@ if ($userRole != 'local') {
                             </div>
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label for="place_image" class="form-label">Place Image</label>
-                                    <input type="file" name="place_image" id="place_image" class="form-control"
-                                        required>
+                                    <label for="acc_image" class="form-label">Accommodation Image</label>
+                                    <input type="file" name="acc_image" id="acc_image" class="form-control" required>
                                 </div>
                             </div>
-                            <div class="col-12 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label for="description" class="form-label">Description</label>
-                                    <input type="text" name="description" id="description" class="form-control"
-                                        required>
+                                    <label for="services" class="form-label">Services</label>
+                                    <input type="text" name="services" id="services" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-success">Add Place</button>
+                                    <button type="submit" class="btn btn-success">Add Accommodation</button>
                                 </div>
                             </div>
                         </div>

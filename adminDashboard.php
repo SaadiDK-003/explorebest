@@ -20,8 +20,9 @@ if ($userRole != 'admin') {
         <div class="container my-5">
             <div class="row">
                 <div class="col-12">
-                    <div class="btn_wrapper d-flex justify-content-center">
+                    <div class="btn_wrapper d-flex justify-content-center gap-2">
                         <a href="./admin/places.php" class="btn btn-primary">Update Places</a>
+                        <a href="./admin/accommodation.php" class="btn btn-secondary">Update Accommodation</a>
                         <a href="#!"></a>
                     </div>
                 </div>

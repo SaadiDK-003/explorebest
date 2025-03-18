@@ -34,31 +34,31 @@ if ($userRole != 'admin') {
                                 <th class="text-center">City Name</th>
                                 <th class="text-center">Type</th>
                                 <th class="text-center">Location</th>
-                                <th class="text-center">Description</th>
+                                <th class="text-center">Services</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $places_Q = $db->query("CALL `get_places_admin`()");
-                            if ($places_Q->num_rows > 0):
-                                while ($place = $places_Q->fetch_object()):
-                                    $status = $place->status;
+                            $acc_Q = $db->query("CALL `get_acc_admin`()");
+                            if ($acc_Q->num_rows > 0):
+                                while ($acc = $acc_Q->fetch_object()):
+                                    $status = $acc->status;
                                     ?>
 
                                     <tr>
-                                        <td class="text-center"><?= $place->city_name ?></td>
-                                        <td class="text-center"><?= $place->type ?></td>
-                                        <td class="text-center"><?= $place->location ?></td>
-                                        <td class="text-center"><?= $place->description ?></td>
+                                        <td class="text-center"><?= $acc->city_name ?></td>
+                                        <td class="text-center"><?= $acc->type ?></td>
+                                        <td class="text-center"><?= $acc->location ?></td>
+                                        <td class="text-center"><?= $acc->services ?></td>
                                         <td class="text-center">
                                             <?= $status == '0' ? '<span class="btn btn-sm btn-warning">Pending</span>' : '<span class="btn btn-sm btn-success">Active</span>' ?>
                                         </td>
-                                        <td class="text-center"><a href="#!" data-id="<?= $place->place_id ?>"
+                                        <td class="text-center"><a href="#!" data-id="<?= $acc->acc_id ?>"
                                                 data-bs-toggle="modal" data-bs-target="#placeModal" data-msg="Place"
                                                 class="btn btn-sm btn-primary btn-get-place"><i class="fas fa-edit"></i></a>
-                                            <a href="#!" data-id="<?= $place->place_id ?>" data-table="places" data-msg="Place"
+                                            <a href="#!" data-id="<?= $acc->acc_id ?>" data-table="places" data-msg="Place"
                                                 class="btn btn-sm btn-danger btn-del"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
@@ -66,7 +66,7 @@ if ($userRole != 'admin') {
                                     <?php
                                 endwhile;
                             endif;
-                            $places_Q->close();
+                            $acc_Q->close();
                             $db->next_result();
                             ?>
                         </tbody>
@@ -136,26 +136,27 @@ if ($userRole != 'admin') {
             // Update Place Status
             $("#updatePlaceStatus").on("submit", function (e) {
                 e.preventDefault();
-                let formData = $(this).serialize();
+                alert('in-progress');
+                // let formData = $(this).serialize();
 
-                $.ajax({
-                    url: "../ajax/place_status.php",
-                    method: "post",
-                    data: formData,
-                    success: function (response) {
-                        let res = JSON.parse(response);
-                        if (res.status == "success") {
-                            $("#ToastSuccess").addClass("fade show");
-                            $("#ToastSuccess .toast-body").html(res.msg);
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 2000);
-                        } else {
-                            $("#ToastDanger").addClass("fade show");
-                            $("#ToastDanger .toast-body").html(res.msg);
-                        }
-                    }
-                });
+                // $.ajax({
+                //     url: "../ajax/place_status.php",
+                //     method: "post",
+                //     data: formData,
+                //     success: function (response) {
+                //         let res = JSON.parse(response);
+                //         if (res.status == "success") {
+                //             $("#ToastSuccess").addClass("fade show");
+                //             $("#ToastSuccess .toast-body").html(res.msg);
+                //             setTimeout(() => {
+                //                 window.location.reload();
+                //             }, 2000);
+                //         } else {
+                //             $("#ToastDanger").addClass("fade show");
+                //             $("#ToastDanger .toast-body").html(res.msg);
+                //         }
+                //     }
+                // });
             });
 
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 18, 2025 at 01:24 PM
+-- Generation Time: Mar 18, 2025 at 06:55 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -21,29 +21,6 @@ SET time_zone = "+00:00";
 -- Database: `explorebest`
 --
 
-DELIMITER $$
---
--- Procedures
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cities` ()   SELECT
-*
-FROM cities c 
-ORDER BY c.city_name ASC$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_places` ()   SELECT
-p.id AS 'place_id',
-c.city_name,
-p.type,
-p.location,
-p.place_img,
-p.description,
-p.status
-FROM places p
-INNER JOIN cities c ON p.city_id=c.id
-ORDER BY p.id DESC$$
-
-DELIMITER ;
-
 -- --------------------------------------------------------
 
 --
@@ -56,74 +33,16 @@ CREATE TABLE `accommodation` (
   `type` enum('apartment','hotel','chalet') NOT NULL DEFAULT 'hotel',
   `location` varchar(255) NOT NULL,
   `accommodation_image` text DEFAULT NULL,
-  `services` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `cities`
---
-
-CREATE TABLE `cities` (
-  `id` int(11) NOT NULL,
-  `city_name` varchar(255) NOT NULL
+  `services` text NOT NULL,
+  `status` enum('0','1') DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `cities`
+-- Dumping data for table `accommodation`
 --
 
-INSERT INTO `cities` (`id`, `city_name`) VALUES
-(2, 'Riyadh'),
-(3, 'Madina');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `places`
---
-
-CREATE TABLE `places` (
-  `id` int(11) NOT NULL,
-  `city_id` int(11) NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `location` varchar(255) NOT NULL,
-  `place_img` text DEFAULT NULL,
-  `description` text NOT NULL,
-  `status` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `places`
---
-
-INSERT INTO `places` (`id`, `city_id`, `type`, `location`, `place_img`, `description`, `status`) VALUES
-(7, 3, 'cafe', 'Libero ipsum eum sit', './img/place/banner.png', 'Dolor nostrum quibus', '0');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` text NOT NULL,
-  `role` enum('admin','tourist','local') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_nopad_ci NOT NULL DEFAULT 'tourist',
-  `status` enum('0','1') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `status`) VALUES
-(1, 'admin', 'admin@gmail.com', '4297f44b13955235245b2497399d7a93', 'admin', '1'),
-(2, 'tourist', 'tourist@gmail.com', '4297f44b13955235245b2497399d7a93', 'tourist', '1'),
-(3, 'local', 'local@gmail.com', '4297f44b13955235245b2497399d7a93', 'local', '1');
+INSERT INTO `accommodation` (`id`, `city_id`, `type`, `location`, `accommodation_image`, `services`, `status`) VALUES
+(1, 2, 'hotel', 'public_html', './img/accommodation/banner.png', 'abcc', '0');
 
 --
 -- Indexes for dumped tables
@@ -136,25 +55,6 @@ ALTER TABLE `accommodation`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `cities`
---
-ALTER TABLE `cities`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `places`
---
-ALTER TABLE `places`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `city_id` (`city_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -162,35 +62,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `accommodation`
 --
 ALTER TABLE `accommodation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `cities`
---
-ALTER TABLE `cities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `places`
---
-ALTER TABLE `places`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `places`
---
-ALTER TABLE `places`
-  ADD CONSTRAINT `places_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`);
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

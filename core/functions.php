@@ -144,26 +144,24 @@ function addAccommodation($POST, $FILE)
 
       try {
 
-            if (!empty($FILE["place_image"]["name"])) {
+            if (!empty($FILE["acc_image"]["name"])) {
 
-                  $fileName = basename($FILE["place_image"]["name"]);
+                  $fileName = basename($FILE["acc_image"]["name"]);
                   $targetFilePath = $targetDir . $fileName;
                   $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
 
                   $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
                   if (in_array($fileType, $allowTypes)) {
-                        if (move_uploaded_file($FILE["place_image"]["tmp_name"], $targetFilePath)) {
+                        if (move_uploaded_file($FILE["acc_image"]["tmp_name"], $targetFilePath)) {
                               foreach ($POST as $key => $value) {
                                     $keys .= $key . ',';
                                     $values .= "'" . $value . "',";
                               }
 
-                              // $keys = substr($keys, 0, -1);
-                              $keys .= 'place_img';
-                              // $values = substr($values, 0, -1);
+                              $keys .= 'accommodation_image';
                               $values .= "'" . $targetFilePath . "'";
 
-                              $placesQ = $db->query("INSERT INTO `places` ($keys) VALUES($values)");
+                              $placesQ = $db->query("INSERT INTO `accommodation` ($keys) VALUES($values)");
                               if ($placesQ) {
                                     $msg = '<h5 class="alert alert-success text-center">Place Added Successfully.</h5>';
                               }
@@ -176,7 +174,7 @@ function addAccommodation($POST, $FILE)
             }
 
       } catch (\Throwable $th) {
-            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 89.</h5>';
+            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 137.</h5>';
       }
 
       echo $msg;
