@@ -89,26 +89,94 @@ function cityList()
 function addPlace($POST, $FILE)
 {
       global $db;
-      $targetDir = '../img/';
+      $targetDir = './img/place/';
       $keys = '';
       $values = '';
       $msg = '';
 
-      foreach ($POST as $key => $value) {
-            $keys .= $key . ',';
-            $values .= "'" . $value . "',";
+      try {
+
+            if (!empty($FILE["place_image"]["name"])) {
+
+                  $fileName = basename($FILE["place_image"]["name"]);
+                  $targetFilePath = $targetDir . $fileName;
+                  $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+                  $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
+                  if (in_array($fileType, $allowTypes)) {
+                        if (move_uploaded_file($FILE["place_image"]["tmp_name"], $targetFilePath)) {
+                              foreach ($POST as $key => $value) {
+                                    $keys .= $key . ',';
+                                    $values .= "'" . $value . "',";
+                              }
+
+                              // $keys = substr($keys, 0, -1);
+                              $keys .= 'place_img';
+                              // $values = substr($values, 0, -1);
+                              $values .= "'" . $targetFilePath . "'";
+
+                              $placesQ = $db->query("INSERT INTO `places` ($keys) VALUES($values)");
+                              if ($placesQ) {
+                                    $msg = '<h5 class="alert alert-success text-center">Place Added Successfully.</h5>';
+                              }
+                        } else {
+                              $msg = '<h5 class="alert alert-danger text-center">Something wrong while uploading file.</h5>';
+                        }
+                  } else {
+                        $msg = '<h5 class="alert alert-danger text-center">Only jpg, png, jpeg and webp are allowed.</h5>';
+                  }
+            }
+
+      } catch (\Throwable $th) {
+            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 89.</h5>';
       }
 
-      $keys = substr($keys, 0, -1);
-      $values = substr($values, 0, -1);
+      echo $msg;
+}
+
+function addAccommodation($POST, $FILE)
+{
+      global $db;
+      $targetDir = './img/accommodation/';
+      $keys = '';
+      $values = '';
+      $msg = '';
 
       try {
-            $placesQ = $db->query("INSERT INTO `places` ($keys) VALUES($values)");
-            if ($placesQ) {
-                  $msg = '<h5 class="alert alert-success text-center">Place Added Successfully.</h5>';
+
+            if (!empty($FILE["place_image"]["name"])) {
+
+                  $fileName = basename($FILE["place_image"]["name"]);
+                  $targetFilePath = $targetDir . $fileName;
+                  $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+                  $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
+                  if (in_array($fileType, $allowTypes)) {
+                        if (move_uploaded_file($FILE["place_image"]["tmp_name"], $targetFilePath)) {
+                              foreach ($POST as $key => $value) {
+                                    $keys .= $key . ',';
+                                    $values .= "'" . $value . "',";
+                              }
+
+                              // $keys = substr($keys, 0, -1);
+                              $keys .= 'place_img';
+                              // $values = substr($values, 0, -1);
+                              $values .= "'" . $targetFilePath . "'";
+
+                              $placesQ = $db->query("INSERT INTO `places` ($keys) VALUES($values)");
+                              if ($placesQ) {
+                                    $msg = '<h5 class="alert alert-success text-center">Place Added Successfully.</h5>';
+                              }
+                        } else {
+                              $msg = '<h5 class="alert alert-danger text-center">Something wrong while uploading file.</h5>';
+                        }
+                  } else {
+                        $msg = '<h5 class="alert alert-danger text-center">Only jpg, png, jpeg and webp are allowed.</h5>';
+                  }
             }
+
       } catch (\Throwable $th) {
-            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 106.</h5>';
+            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 89.</h5>';
       }
 
       echo $msg;

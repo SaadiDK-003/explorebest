@@ -16,7 +16,7 @@ if ($userRole != 'local') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= env("TITLE") ?> | Places Dashboard</title>
+    <title><?= env("TITLE") ?> | Accommodation Dashboard</title>
     <?php include_once "includes/external_css.php"; ?>
 </head>
 
@@ -27,7 +27,7 @@ if ($userRole != 'local') {
             <div class="row">
                 <div class="col-12 col-md-6 mx-auto">
                     <?php if (isset($_POST['city_id']) && isset($_POST['type'])) {
-                        addPlace($_POST, $_FILES);
+                        addAccommodation($_POST, $_FILES);
                     } ?>
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="row">
