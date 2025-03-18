@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 15, 2025 at 11:30 PM
+-- Generation Time: Mar 18, 2025 at 01:24 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,6 +35,7 @@ p.id AS 'place_id',
 c.city_name,
 p.type,
 p.location,
+p.place_img,
 p.description,
 p.status
 FROM places p
@@ -42,6 +43,21 @@ INNER JOIN cities c ON p.city_id=c.id
 ORDER BY p.id DESC$$
 
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accommodation`
+--
+
+CREATE TABLE `accommodation` (
+  `id` int(11) NOT NULL,
+  `city_id` int(11) NOT NULL,
+  `type` enum('apartment','hotel','chalet') NOT NULL DEFAULT 'hotel',
+  `location` varchar(255) NOT NULL,
+  `accommodation_image` text DEFAULT NULL,
+  `services` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -73,9 +89,17 @@ CREATE TABLE `places` (
   `city_id` int(11) NOT NULL,
   `type` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL,
+  `place_img` text DEFAULT NULL,
   `description` text NOT NULL,
   `status` enum('0','1') NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `places`
+--
+
+INSERT INTO `places` (`id`, `city_id`, `type`, `location`, `place_img`, `description`, `status`) VALUES
+(7, 3, 'cafe', 'Libero ipsum eum sit', './img/place/banner.png', 'Dolor nostrum quibus', '0');
 
 -- --------------------------------------------------------
 
@@ -106,6 +130,12 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `status`) VA
 --
 
 --
+-- Indexes for table `accommodation`
+--
+ALTER TABLE `accommodation`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `cities`
 --
 ALTER TABLE `cities`
@@ -129,6 +159,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `accommodation`
+--
+ALTER TABLE `accommodation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `cities`
 --
 ALTER TABLE `cities`
@@ -138,7 +174,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `places`
 --
 ALTER TABLE `places`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
