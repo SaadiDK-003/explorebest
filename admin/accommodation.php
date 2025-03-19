@@ -56,10 +56,11 @@ if ($userRole != 'admin') {
                                             <?= $status == '0' ? '<span class="btn btn-sm btn-warning">Pending</span>' : '<span class="btn btn-sm btn-success">Active</span>' ?>
                                         </td>
                                         <td class="text-center"><a href="#!" data-id="<?= $acc->acc_id ?>"
-                                                data-bs-toggle="modal" data-bs-target="#placeModal" data-msg="Place"
+                                                data-bs-toggle="modal" data-bs-target="#placeModal" data-msg="Accommodation"
                                                 class="btn btn-sm btn-primary btn-get-place"><i class="fas fa-edit"></i></a>
-                                            <a href="#!" data-id="<?= $acc->acc_id ?>" data-table="places" data-msg="Place"
-                                                class="btn btn-sm btn-danger btn-del"><i class="fas fa-trash"></i></a>
+                                            <a href="#!" data-id="<?= $acc->acc_id ?>" data-table="accommodation"
+                                                data-msg="Accommodation" class="btn btn-sm btn-danger btn-del"><i
+                                                    class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
 
@@ -83,9 +84,9 @@ if ($userRole != 'admin') {
     <div class="modal fade" id="placeModal" tabindex="-1" aria-labelledby="placeLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
-                <form id="updatePlaceStatus">
+                <form id="updateAccStatus">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="placeLabel">Update Place</h1>
+                        <h1 class="modal-title fs-5" id="placeLabel">Upd Accommodation</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -104,7 +105,7 @@ if ($userRole != 'admin') {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <input type="hidden" name="place_id">
+                        <input type="hidden" name="acc_id">
                         <input type="hidden" name="msg">
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
@@ -129,34 +130,33 @@ if ($userRole != 'admin') {
                 e.preventDefault();
                 let id = $(this).data("id");
                 let msg = $(this).data("msg");
-                $("input[name='place_id']").val(id);
+                $("input[name='acc_id']").val(id);
                 $("input[name='msg']").val(msg);
             });
 
             // Update Place Status
-            $("#updatePlaceStatus").on("submit", function (e) {
+            $("#updateAccStatus").on("submit", function (e) {
                 e.preventDefault();
-                alert('in-progress');
-                // let formData = $(this).serialize();
+                let formData = $(this).serialize();
 
-                // $.ajax({
-                //     url: "../ajax/place_status.php",
-                //     method: "post",
-                //     data: formData,
-                //     success: function (response) {
-                //         let res = JSON.parse(response);
-                //         if (res.status == "success") {
-                //             $("#ToastSuccess").addClass("fade show");
-                //             $("#ToastSuccess .toast-body").html(res.msg);
-                //             setTimeout(() => {
-                //                 window.location.reload();
-                //             }, 2000);
-                //         } else {
-                //             $("#ToastDanger").addClass("fade show");
-                //             $("#ToastDanger .toast-body").html(res.msg);
-                //         }
-                //     }
-                // });
+                $.ajax({
+                    url: "../ajax/acc_status.php",
+                    method: "post",
+                    data: formData,
+                    success: function (response) {
+                        let res = JSON.parse(response);
+                        if (res.status == "success") {
+                            $("#ToastSuccess").addClass("fade show");
+                            $("#ToastSuccess .toast-body").html(res.msg);
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                        } else {
+                            $("#ToastDanger").addClass("fade show");
+                            $("#ToastDanger .toast-body").html(res.msg);
+                        }
+                    }
+                });
             });
 
 
