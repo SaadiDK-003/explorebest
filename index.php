@@ -43,6 +43,84 @@ require_once 'core/database.php';
                         </div>
                   </div>
             </section>
+            <div class="container my-3">
+                  <div class="row">
+                        <div class="col-12 text-center">
+                              <h1>Places To Visit in Saudia Arabia</h1>
+                              <p>We welcome you to visit our country and see the Word Most Beautiful Places
+                                    <strong>Makkah</strong> & <strong>Madina</strong>
+                              </p>
+                        </div>
+                  </div>
+            </div>
+            <!-- Places -->
+            <section class="places">
+                  <div class="container">
+                        <div class="row">
+                              <div class="col-12">
+                                    <h1 class="bg-primary-custom text-white rounded ps-2 mb-3">Places</h1>
+                              </div>
+                              <?php
+                              $places_Q = $db->query("CALL `get_places`()");
+                              while ($place_ = $places_Q->fetch_object()):
+                                    ?>
+                                    <div class="col-12 col-md-3 mb-3">
+                                          <div class="content bg-white p-2 rounded">
+                                                <div class="img">
+                                                      <img src="<?= $place_->place_img ?>" alt="restaurant">
+                                                </div>
+                                                <hr>
+                                                <div class="info d-flex align-items-center justify-content-between">
+                                                      <h3><?= $place_->city_name ?></h3>
+                                                      <h5 class="btn btn-sm btn-secondary"><?= $place_->type ?></h5>
+                                                </div>
+                                                <p>
+                                                      <?= $place_->description ?>
+                                                </p>
+                                                <a href="<?= $place_->location ?>" target="_blank"
+                                                      class="btn btn-primary w-100">Location</a>
+                                          </div>
+                                    </div>
+                              <?php endwhile;
+                              $places_Q->close();
+                              $db->next_result(); ?>
+                        </div>
+                  </div>
+            </section>
+            <!-- Accommodations -->
+            <section class="places">
+                  <div class="container">
+                        <div class="row">
+                              <div class="col-12">
+                                    <h1 class="bg-primary-custom text-white rounded ps-2 mb-3">Accommodations</h1>
+                              </div>
+                              <?php
+                              $acc_Q = $db->query("CALL `get_acc`()");
+                              while ($acc_ = $acc_Q->fetch_object()):
+                                    ?>
+                                    <div class="col-12 col-md-3 mb-3">
+                                          <div class="content bg-white p-2 rounded">
+                                                <div class="img">
+                                                      <img src="<?= $acc_->acc_img ?>" alt="restaurant">
+                                                </div>
+                                                <hr>
+                                                <div class="info d-flex align-items-center justify-content-between">
+                                                      <h3><?= $acc_->city_name ?></h3>
+                                                      <h5 class="btn btn-sm btn-secondary"><?= $acc_->type ?></h5>
+                                                </div>
+                                                <p>
+                                                      <?= $acc_->services ?>
+                                                </p>
+                                                <a href="<?= $acc_->location ?>" target="_blank"
+                                                      class="btn btn-primary w-100">Location</a>
+                                          </div>
+                                    </div>
+                              <?php endwhile;
+                              $acc_Q->close();
+                              $db->next_result(); ?>
+                        </div>
+                  </div>
+            </section>
       </main>
       <?php include_once 'includes/footer.php'; ?>
       <?php include_once 'includes/external_js.php'; ?>
