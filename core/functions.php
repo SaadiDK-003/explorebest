@@ -154,7 +154,7 @@ function addPlace($POST, $FILE, $userid)
             }
 
       } catch (\Throwable $th) {
-            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 89.</h5>';
+            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 115.</h5>';
       }
 
       echo $msg;
@@ -200,7 +200,7 @@ function addAccommodation($POST, $FILE, $userid)
             }
 
       } catch (\Throwable $th) {
-            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 137.</h5>';
+            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 163.</h5>';
       }
 
       echo $msg;
@@ -216,26 +216,26 @@ function addEvent($POST, $FILE, $userid)
 
       try {
 
-            if (!empty($FILE["acc_image"]["name"])) {
+            if (!empty($FILE["event_image"]["name"])) {
 
-                  $fileName = basename($FILE["acc_image"]["name"]);
+                  $fileName = basename($FILE["event_image"]["name"]);
                   $targetFilePath = $targetDir . $fileName;
                   $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
 
                   $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
                   if (in_array($fileType, $allowTypes)) {
-                        if (move_uploaded_file($FILE["acc_image"]["tmp_name"], $targetFilePath)) {
+                        if (move_uploaded_file($FILE["event_image"]["tmp_name"], $targetFilePath)) {
                               foreach ($POST as $key => $value) {
                                     $keys .= $key . ',';
                                     $values .= "'" . $value . "',";
                               }
 
-                              $keys .= 'accommodation_image,u_id';
+                              $keys .= 'event_img,u_id';
                               $values .= "'" . $targetFilePath . "','" . $userid . "'";
 
-                              $placesQ = $db->query("INSERT INTO `accommodation` ($keys) VALUES($values)");
+                              $placesQ = $db->query("INSERT INTO `events` ($keys) VALUES($values)");
                               if ($placesQ) {
-                                    $msg = '<h5 class="alert alert-success text-center">Place Added Successfully.</h5>';
+                                    $msg = '<h5 class="alert alert-success text-center">Event Added Successfully.</h5>';
                               }
                         } else {
                               $msg = '<h5 class="alert alert-danger text-center">Something wrong while uploading file.</h5>';
@@ -246,7 +246,7 @@ function addEvent($POST, $FILE, $userid)
             }
 
       } catch (\Throwable $th) {
-            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 137.</h5>';
+            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 209.</h5>';
       }
 
       echo $msg;

@@ -29,7 +29,7 @@ if ($userRole != 'local') {
                     <a href="./localDashboard.php" class="btn btn-primary">Go Back</a>
                 </div>
                 <div class="col-12 col-md-6 mx-auto">
-                    <?php if (isset($_POST['city_id']) && isset($_POST['type'])) {
+                    <?php if (isset($_POST['city_id']) && isset($_POST['event_name'])) {
                         addEvent($_POST, $_FILES, $userid);
                     } ?>
                     <form action="" method="post" enctype="multipart/form-data">
@@ -48,8 +48,8 @@ if ($userRole != 'local') {
                             </div>
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label for="name" class="form-label">Event Name</label>
-                                    <input type="text" name="name" id="name" class="form-control" required>
+                                    <label for="event_name" class="form-label">Event Name</label>
+                                    <input type="text" name="event_name" id="event_name" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 mb-3">
@@ -60,8 +60,8 @@ if ($userRole != 'local') {
                             </div>
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label for="place_image" class="form-label">Place Image</label>
-                                    <input type="file" name="place_image" id="place_image" class="form-control"
+                                    <label for="event_image" class="form-label">Event Image</label>
+                                    <input type="file" name="event_image" id="event_image" class="form-control"
                                         required>
                                 </div>
                             </div>

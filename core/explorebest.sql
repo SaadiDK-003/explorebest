@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2025 at 04:15 AM
+-- Generation Time: Mar 24, 2025 at 04:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -161,6 +161,7 @@ INSERT INTO `cities` (`id`, `city_name`) VALUES
 
 CREATE TABLE `events` (
   `id` int(11) NOT NULL,
+  `city_id` int(11) NOT NULL,
   `event_name` varchar(255) NOT NULL,
   `date` date DEFAULT NULL,
   `booking_link` varchar(255) DEFAULT NULL,
@@ -168,6 +169,13 @@ CREATE TABLE `events` (
   `u_id` int(11) NOT NULL,
   `status` enum('0','1') NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`id`, `city_id`, `event_name`, `date`, `booking_link`, `event_img`, `u_id`, `status`) VALUES
+(1, 2, 'Jamal Odonnell', '2025-03-24', 'Quia ipsa dolor lab', './img/event_/explore_bg.webp', 3, '0');
 
 -- --------------------------------------------------------
 
@@ -265,7 +273,9 @@ ALTER TABLE `cities`
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `city_id` (`city_id`),
+  ADD KEY `u_id` (`u_id`);
 
 --
 -- Indexes for table `places`
@@ -313,7 +323,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `places`
@@ -343,6 +353,13 @@ ALTER TABLE `users`
 ALTER TABLE `accommodation`
   ADD CONSTRAINT `accommodation_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`),
   ADD CONSTRAINT `accommodation_ibfk_2` FOREIGN KEY (`u_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `events`
+--
+ALTER TABLE `events`
+  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`),
+  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`u_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `places`
