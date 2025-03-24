@@ -86,7 +86,33 @@ function cityList()
       $db->next_result();
 }
 
-function addPlace($POST, $FILE)
+function placeTypes()
+{
+      global $db;
+      $placeT_Q = $db->query("CALL `get_place_types`()");
+      while ($placeT = mysqli_fetch_object($placeT_Q)) {
+            ?>
+            <option value="<?= $placeT->types ?>"><?= $placeT->types ?></option>
+            <?php
+      }
+      $placeT_Q->close();
+      $db->next_result();
+}
+
+function AccommodationTypes()
+{
+      global $db;
+      $accT_Q = $db->query("CALL `get_acc_types`()");
+      while ($accT = mysqli_fetch_object($accT_Q)) {
+            ?>
+            <option value="<?= $accT->types ?>"><?= $accT->types ?></option>
+            <?php
+      }
+      $accT_Q->close();
+      $db->next_result();
+}
+
+function addPlace($POST, $FILE, $userid)
 {
       global $db;
       $targetDir = './img/place/';
@@ -111,9 +137,9 @@ function addPlace($POST, $FILE)
                               }
 
                               // $keys = substr($keys, 0, -1);
-                              $keys .= 'place_img';
                               // $values = substr($values, 0, -1);
-                              $values .= "'" . $targetFilePath . "'";
+                              $keys .= 'place_img,u_id';
+                              $values .= "'" . $targetFilePath . "','" . $userid . "'";
 
                               $placesQ = $db->query("INSERT INTO `places` ($keys) VALUES($values)");
                               if ($placesQ) {
@@ -134,7 +160,7 @@ function addPlace($POST, $FILE)
       echo $msg;
 }
 
-function addAccommodation($POST, $FILE)
+function addAccommodation($POST, $FILE, $userid)
 {
       global $db;
       $targetDir = './img/accommodation/';
@@ -158,8 +184,54 @@ function addAccommodation($POST, $FILE)
                                     $values .= "'" . $value . "',";
                               }
 
-                              $keys .= 'accommodation_image';
-                              $values .= "'" . $targetFilePath . "'";
+                              $keys .= 'accommodation_image,u_id';
+                              $values .= "'" . $targetFilePath . "','" . $userid . "'";
+
+                              $placesQ = $db->query("INSERT INTO `accommodation` ($keys) VALUES($values)");
+                              if ($placesQ) {
+                                    $msg = '<h5 class="alert alert-success text-center">Place Added Successfully.</h5>';
+                              }
+                        } else {
+                              $msg = '<h5 class="alert alert-danger text-center">Something wrong while uploading file.</h5>';
+                        }
+                  } else {
+                        $msg = '<h5 class="alert alert-danger text-center">Only jpg, png, jpeg and webp are allowed.</h5>';
+                  }
+            }
+
+      } catch (\Throwable $th) {
+            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 137.</h5>';
+      }
+
+      echo $msg;
+}
+
+function addEvent($POST, $FILE, $userid)
+{
+      global $db;
+      $targetDir = './img/event_/';
+      $keys = '';
+      $values = '';
+      $msg = '';
+
+      try {
+
+            if (!empty($FILE["acc_image"]["name"])) {
+
+                  $fileName = basename($FILE["acc_image"]["name"]);
+                  $targetFilePath = $targetDir . $fileName;
+                  $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+                  $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
+                  if (in_array($fileType, $allowTypes)) {
+                        if (move_uploaded_file($FILE["acc_image"]["tmp_name"], $targetFilePath)) {
+                              foreach ($POST as $key => $value) {
+                                    $keys .= $key . ',';
+                                    $values .= "'" . $value . "',";
+                              }
+
+                              $keys .= 'accommodation_image,u_id';
+                              $values .= "'" . $targetFilePath . "','" . $userid . "'";
 
                               $placesQ = $db->query("INSERT INTO `accommodation` ($keys) VALUES($values)");
                               if ($placesQ) {

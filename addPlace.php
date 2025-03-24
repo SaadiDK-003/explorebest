@@ -30,7 +30,7 @@ if ($userRole != 'local') {
                 </div>
                 <div class="col-12 col-md-6 mx-auto">
                     <?php if (isset($_POST['city_id']) && isset($_POST['type'])) {
-                        addPlace($_POST, $_FILES);
+                        addPlace($_POST, $_FILES, $userid);
                     } ?>
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="row">
@@ -51,8 +51,7 @@ if ($userRole != 'local') {
                                     <label for="type" class="form-label">Type</label>
                                     <select name="type" id="type" class="form-select" required>
                                         <option value="" selected hidden>Select Type</option>
-                                        <option value="restaurant">Restaurant</option>
-                                        <option value="cafe">Cafe</option>
+                                        <?= placeTypes() ?>
                                     </select>
                                 </div>
                             </div>

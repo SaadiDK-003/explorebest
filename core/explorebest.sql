@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2025 at 06:53 PM
+-- Generation Time: Mar 24, 2025 at 04:15 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -50,6 +50,10 @@ FROM accommodation a
 INNER JOIN cities c ON a.city_id=c.id
 ORDER BY a.id DESC$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_acc_types` ()   SELECT
+*
+FROM accommodation_types$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cities` ()   SELECT
 *
 FROM cities c 
@@ -80,6 +84,10 @@ FROM places p
 INNER JOIN cities c ON p.city_id=c.id
 ORDER BY p.id DESC$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_place_types` ()   SELECT
+*
+FROM place_types$$
+
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -91,10 +99,11 @@ DELIMITER ;
 CREATE TABLE `accommodation` (
   `id` int(11) NOT NULL,
   `city_id` int(11) NOT NULL,
-  `type` enum('apartment','hotel','chalet') NOT NULL DEFAULT 'hotel',
+  `type` varchar(255) NOT NULL DEFAULT 'hotel',
   `location` varchar(255) NOT NULL,
   `accommodation_image` text DEFAULT NULL,
   `services` text NOT NULL,
+  `u_id` int(11) NOT NULL,
   `status` enum('0','1') DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -102,8 +111,28 @@ CREATE TABLE `accommodation` (
 -- Dumping data for table `accommodation`
 --
 
-INSERT INTO `accommodation` (`id`, `city_id`, `type`, `location`, `accommodation_image`, `services`, `status`) VALUES
-(2, 3, 'hotel', 'https://www.elafhotels.com/elaf-al-taqwa', './img/accommodation/hotel.jpg', 'Private parking,Free WiFi', '1');
+INSERT INTO `accommodation` (`id`, `city_id`, `type`, `location`, `accommodation_image`, `services`, `u_id`, `status`) VALUES
+(2, 3, 'hotel', 'https://www.elafhotels.com/elaf-al-taqwa', './img/accommodation/hotel.jpg', 'Private parking,Free WiFi', 3, '1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accommodation_types`
+--
+
+CREATE TABLE `accommodation_types` (
+  `id` int(11) NOT NULL,
+  `types` enum('apartment','hotel','chalet') NOT NULL DEFAULT 'hotel'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `accommodation_types`
+--
+
+INSERT INTO `accommodation_types` (`id`, `types`) VALUES
+(1, 'apartment'),
+(2, 'chalet'),
+(3, 'hotel');
 
 -- --------------------------------------------------------
 
@@ -127,16 +156,33 @@ INSERT INTO `cities` (`id`, `city_name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `events`
+--
+
+CREATE TABLE `events` (
+  `id` int(11) NOT NULL,
+  `event_name` varchar(255) NOT NULL,
+  `date` date DEFAULT NULL,
+  `booking_link` varchar(255) DEFAULT NULL,
+  `event_img` text DEFAULT NULL,
+  `u_id` int(11) NOT NULL,
+  `status` enum('0','1') NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `places`
 --
 
 CREATE TABLE `places` (
   `id` int(11) NOT NULL,
   `city_id` int(11) NOT NULL,
-  `type` varchar(255) NOT NULL,
+  `type` varchar(255) DEFAULT 'restaurant',
   `location` varchar(255) NOT NULL,
   `place_img` text DEFAULT NULL,
   `description` text NOT NULL,
+  `u_id` int(11) NOT NULL,
   `status` enum('0','1') DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -144,8 +190,28 @@ CREATE TABLE `places` (
 -- Dumping data for table `places`
 --
 
-INSERT INTO `places` (`id`, `city_id`, `type`, `location`, `place_img`, `description`, `status`) VALUES
-(8, 2, 'restaurant', 'https://g.co/kgs/39vddFX', './img/place/restaurant.jpg', 'good coffee that is perfect for work :D', '1');
+INSERT INTO `places` (`id`, `city_id`, `type`, `location`, `place_img`, `description`, `u_id`, `status`) VALUES
+(8, 2, 'restaurant', 'https://g.co/kgs/39vddFX', './img/place/restaurant.jpg', 'good coffee that is perfect for work :D', 3, '1'),
+(9, 3, 'cafe', 'Beautiful Place', './img/place/hotel.jpg', 'good coffee that is perfect for work :D', 3, '1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `place_types`
+--
+
+CREATE TABLE `place_types` (
+  `id` int(11) NOT NULL,
+  `types` enum('restaurant','cafe') NOT NULL DEFAULT 'restaurant'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `place_types`
+--
+
+INSERT INTO `place_types` (`id`, `types`) VALUES
+(1, 'restaurant'),
+(2, 'cafe');
 
 -- --------------------------------------------------------
 
@@ -179,6 +245,14 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `status`) VA
 -- Indexes for table `accommodation`
 --
 ALTER TABLE `accommodation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `city_id` (`city_id`),
+  ADD KEY `u_id` (`u_id`);
+
+--
+-- Indexes for table `accommodation_types`
+--
+ALTER TABLE `accommodation_types`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -188,11 +262,24 @@ ALTER TABLE `cities`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `events`
+--
+ALTER TABLE `events`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `places`
 --
 ALTER TABLE `places`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `city_id` (`city_id`);
+  ADD KEY `city_id` (`city_id`),
+  ADD KEY `u_id` (`u_id`);
+
+--
+-- Indexes for table `place_types`
+--
+ALTER TABLE `place_types`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -208,7 +295,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `accommodation`
 --
 ALTER TABLE `accommodation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `accommodation_types`
+--
+ALTER TABLE `accommodation_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -217,10 +310,22 @@ ALTER TABLE `cities`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `events`
+--
+ALTER TABLE `events`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `places`
 --
 ALTER TABLE `places`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `place_types`
+--
+ALTER TABLE `place_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -233,10 +338,18 @@ ALTER TABLE `users`
 --
 
 --
+-- Constraints for table `accommodation`
+--
+ALTER TABLE `accommodation`
+  ADD CONSTRAINT `accommodation_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`),
+  ADD CONSTRAINT `accommodation_ibfk_2` FOREIGN KEY (`u_id`) REFERENCES `users` (`id`);
+
+--
 -- Constraints for table `places`
 --
 ALTER TABLE `places`
-  ADD CONSTRAINT `places_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`);
+  ADD CONSTRAINT `places_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`),
+  ADD CONSTRAINT `places_ibfk_2` FOREIGN KEY (`u_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

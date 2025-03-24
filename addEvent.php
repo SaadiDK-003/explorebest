@@ -16,7 +16,7 @@ if ($userRole != 'local') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= env("TITLE") ?> | Accommodation Dashboard</title>
+    <title><?= env("TITLE") ?> | Events Dashboard</title>
     <?php include_once "includes/external_css.php"; ?>
 </head>
 
@@ -30,12 +30,12 @@ if ($userRole != 'local') {
                 </div>
                 <div class="col-12 col-md-6 mx-auto">
                     <?php if (isset($_POST['city_id']) && isset($_POST['type'])) {
-                        addAccommodation($_POST, $_FILES, $userid);
+                        addEvent($_POST, $_FILES, $userid);
                     } ?>
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-12">
-                                <h1 class="text-center">Add Accommodation</h1>
+                                <h1 class="text-center">Add An Event</h1>
                             </div>
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
@@ -48,34 +48,33 @@ if ($userRole != 'local') {
                             </div>
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label for="type" class="form-label">Type</label>
-                                    <select name="type" id="type" class="form-select" required>
-                                        <option value="" selected hidden>Select Type</option>
-                                        <?= AccommodationTypes() ?>
-                                    </select>
+                                    <label for="name" class="form-label">Event Name</label>
+                                    <input type="text" name="name" id="name" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label for="location" class="form-label">Location</label>
-                                    <input type="text" name="location" id="location" class="form-control" required>
+                                    <label for="date" class="form-label">Event Date</label>
+                                    <input type="date" name="date" id="date" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label for="acc_image" class="form-label">Accommodation Image</label>
-                                    <input type="file" name="acc_image" id="acc_image" class="form-control" required>
+                                    <label for="place_image" class="form-label">Place Image</label>
+                                    <input type="file" name="place_image" id="place_image" class="form-control"
+                                        required>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6 mb-3">
+                            <div class="col-12 mb-3">
                                 <div class="form-group">
-                                    <label for="services" class="form-label">Services</label>
-                                    <input type="text" name="services" id="services" class="form-control" required>
+                                    <label for="booking_link" class="form-label">Booking Link</label>
+                                    <input type="text" name="booking_link" id="booking_link" class="form-control"
+                                        required>
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-success">Add Accommodation</button>
+                                    <button type="submit" class="btn btn-success">Add Event</button>
                                 </div>
                             </div>
                         </div>

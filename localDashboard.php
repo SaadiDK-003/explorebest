@@ -29,6 +29,7 @@ if ($userRole != 'local') {
                     <div class="buttons_wrapper text-center">
                         <a href="./addPlace.php" class="btn btn-primary mb-3">Add Places</a>
                         <a href="./addAccommodation.php" class="btn btn-secondary mb-3">Add Accommodations</a>
+                        <a href="./addEvent.php" class="btn btn-warning mb-3">Add Event</a>
                     </div>
                 </div>
             </div>
