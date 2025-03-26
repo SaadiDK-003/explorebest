@@ -35,6 +35,7 @@ if ($userRole != 'admin') {
                                 <th class="text-center">Type</th>
                                 <th class="text-center">Location</th>
                                 <th class="text-center">Services</th>
+                                <th class="text-center">Image</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -52,6 +53,10 @@ if ($userRole != 'admin') {
                                         <td class="text-center"><?= $acc->type ?></td>
                                         <td class="text-center"><?= $acc->location ?></td>
                                         <td class="text-center"><?= $acc->services ?></td>
+                                        <td class="text-center">
+                                            <img src="<?= env("SITE_URL") ?><?= $acc->accommodation_image ?>" width="80"
+                                                height="80" class="d-block mx-auto rounded" alt="acc_<?= $acc->acc_id ?>">
+                                        </td>
                                         <td class="text-center">
                                             <?= $status == '0' ? '<span class="btn btn-sm btn-warning">Pending</span>' : '<span class="btn btn-sm btn-success">Active</span>' ?>
                                         </td>

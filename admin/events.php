@@ -10,7 +10,7 @@ if ($userRole != 'admin') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= env("TITLE") ?> | Admin Places Dashboard</title>
+    <title><?= env("TITLE") ?> | Admin Events Dashboard</title>
     <?php include_once "../includes/external_css.php"; ?>
 </head>
 
@@ -32,38 +32,38 @@ if ($userRole != 'admin') {
                         <thead>
                             <tr>
                                 <th class="text-center">City Name</th>
-                                <th class="text-center">Type</th>
-                                <th class="text-center">Location</th>
-                                <th class="text-center">Description</th>
-                                <th class="text-center">Image</th>
+                                <th class="text-center">Event Name</th>
+                                <th class="text-center">Date</th>
+                                <th class="text-center">Booking Link</th>
+                                <th class="text-center">Event Img</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $places_Q = $db->query("CALL `get_places_admin`()");
-                            if ($places_Q->num_rows > 0):
-                                while ($place = $places_Q->fetch_object()):
-                                    $status = $place->status;
+                            $events_Q = $db->query("CALL `get_events_admin`()");
+                            if ($events_Q->num_rows > 0):
+                                while ($event = $events_Q->fetch_object()):
+                                    $status = $event->status;
                                     ?>
 
                                     <tr>
-                                        <td class="text-center"><?= $place->city_name ?></td>
-                                        <td class="text-center"><?= $place->type ?></td>
-                                        <td class="text-center"><?= $place->location ?></td>
-                                        <td class="text-center"><?= $place->description ?></td>
+                                        <td class="text-center"><?= $event->city_name ?></td>
+                                        <td class="text-center"><?= $event->event_name ?></td>
+                                        <td class="text-center"><?= $event->date ?></td>
+                                        <td class="text-center"><?= $event->booking_link ?></td>
                                         <td class="text-center">
-                                            <img src="<?= env("SITE_URL") ?><?= $place->place_img ?>" width="80" height="80"
-                                                class="d-block mx-auto rounded" alt="place_<?= $place->place_id ?>">
+                                            <img src="<?= env("SITE_URL") ?><?= $event->event_img ?>" width="80" height="80"
+                                                class="d-block mx-auto rounded" alt="event_<?= $event->event_id ?>">
                                         </td>
                                         <td class="text-center">
                                             <?= $status == '0' ? '<span class="btn btn-sm btn-warning">Pending</span>' : '<span class="btn btn-sm btn-success">Active</span>' ?>
                                         </td>
-                                        <td class="text-center"><a href="#!" data-id="<?= $place->place_id ?>"
-                                                data-bs-toggle="modal" data-bs-target="#placeModal" data-msg="Place"
-                                                class="btn btn-sm btn-primary btn-get-place"><i class="fas fa-edit"></i></a>
-                                            <a href="#!" data-id="<?= $place->place_id ?>" data-table="places" data-msg="Place"
+                                        <td class="text-center"><a href="#!" data-id="<?= $event->event_id ?>"
+                                                data-bs-toggle="modal" data-bs-target="#eventModal" data-msg="Event"
+                                                class="btn btn-sm btn-primary btn-get-event"><i class="fas fa-edit"></i></a>
+                                            <a href="#!" data-id="<?= $event->event_id ?>" data-table="events" data-msg="Event"
                                                 class="btn btn-sm btn-danger btn-del"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
@@ -71,7 +71,7 @@ if ($userRole != 'admin') {
                                     <?php
                                 endwhile;
                             endif;
-                            $places_Q->close();
+                            $events_Q->close();
                             $db->next_result();
                             ?>
                         </tbody>
@@ -85,12 +85,12 @@ if ($userRole != 'admin') {
 
 
     <!-- Modal -->
-    <div class="modal fade" id="placeModal" tabindex="-1" aria-labelledby="placeLabel" aria-hidden="true">
+    <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
-                <form id="updatePlaceStatus">
+                <form id="updateEventStatus">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="placeLabel">Update Place</h1>
+                        <h1 class="modal-title fs-5" id="eventLabel">Update Event</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -109,7 +109,7 @@ if ($userRole != 'admin') {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <input type="hidden" name="place_id">
+                        <input type="hidden" name="event_id">
                         <input type="hidden" name="msg">
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
@@ -130,21 +130,21 @@ if ($userRole != 'admin') {
             });
 
 
-            $(document).on("click", ".btn-get-place", function (e) {
+            $(document).on("click", ".btn-get-event", function (e) {
                 e.preventDefault();
                 let id = $(this).data("id");
                 let msg = $(this).data("msg");
-                $("input[name='place_id']").val(id);
+                $("input[name='event_id']").val(id);
                 $("input[name='msg']").val(msg);
             });
 
             // Update Place Status
-            $("#updatePlaceStatus").on("submit", function (e) {
+            $("#updateEventStatus").on("submit", function (e) {
                 e.preventDefault();
                 let formData = $(this).serialize();
 
                 $.ajax({
-                    url: "../ajax/place_status.php",
+                    url: "../ajax/event_status.php",
                     method: "post",
                     data: formData,
                     success: function (response) {

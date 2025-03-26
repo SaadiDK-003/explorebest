@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2025 at 04:22 AM
+-- Generation Time: Mar 26, 2025 at 01:27 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -58,6 +58,31 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cities` ()   SELECT
 *
 FROM cities c 
 ORDER BY c.city_name ASC$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_events` ()   SELECT
+e.id AS 'event_id',
+c.city_name,
+e.event_name,
+e.date,
+e.booking_link,
+e.event_img,
+e.status
+FROM events e
+INNER JOIN cities c ON e.city_id=c.id
+WHERE e.status = '1'
+ORDER BY e.id DESC$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_events_admin` ()   SELECT
+e.id AS 'event_id',
+c.city_name,
+e.event_name,
+e.date,
+e.booking_link,
+e.event_img,
+e.status
+FROM events e
+INNER JOIN cities c ON e.city_id=c.id
+ORDER BY e.id DESC$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_places` ()   SELECT
 p.id AS 'place_id',
@@ -175,7 +200,7 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `city_id`, `event_name`, `date`, `booking_link`, `event_img`, `u_id`, `status`) VALUES
-(1, 2, 'Jamal Odonnell', '2025-03-24', 'Quia ipsa dolor lab', './img/event_/explore_bg.webp', 3, '0');
+(2, 2, 'Nora Santos', '2025-04-03', 'Eos sunt fuga Vero ', './img/event_/explore_bg.webp', 3, '1');
 
 -- --------------------------------------------------------
 
@@ -323,7 +348,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `places`

@@ -88,7 +88,7 @@ require_once 'core/database.php';
                   </div>
             </section>
             <!-- Accommodations -->
-            <section class="places">
+            <section class="accommodations">
                   <div class="container">
                         <div class="row">
                               <div class="col-12">
@@ -117,6 +117,38 @@ require_once 'core/database.php';
                                     </div>
                               <?php endwhile;
                               $acc_Q->close();
+                              $db->next_result(); ?>
+                        </div>
+                  </div>
+            </section>
+            <!-- Events -->
+            <section class="events">
+                  <div class="container">
+                        <div class="row">
+                              <div class="col-12">
+                                    <h1 class="bg-primary-custom text-white rounded ps-2 mb-3">Accommodations</h1>
+                              </div>
+                              <?php
+                              $event_Q = $db->query("CALL `get_events`()");
+                              while ($event_ = $event_Q->fetch_object()):
+                                    ?>
+                                    <div class="col-12 col-md-3 mb-3">
+                                          <div class="content bg-white p-2 rounded">
+                                                <div class="img">
+                                                      <img src="<?= $event_->event_img ?>" alt="restaurant">
+                                                </div>
+                                                <hr>
+                                                <div class="info d-flex align-items-center justify-content-between">
+                                                      <h3><?= $event_->event_name ?></h3>
+                                                      <h5 class="btn btn-sm btn-secondary"><?= $event_->city_name ?></h5>
+                                                </div>
+
+                                                <a href="<?= $event_->booking_link ?>" target="_blank"
+                                                      class="btn btn-primary w-100">Booking Link</a>
+                                          </div>
+                                    </div>
+                              <?php endwhile;
+                              $event_Q->close();
                               $db->next_result(); ?>
                         </div>
                   </div>
