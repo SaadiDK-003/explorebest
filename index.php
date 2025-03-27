@@ -126,7 +126,7 @@ require_once 'core/database.php';
                   <div class="container">
                         <div class="row">
                               <div class="col-12">
-                                    <h1 class="bg-primary-custom text-white rounded ps-2 mb-3">Accommodations</h1>
+                                    <h1 class="bg-primary-custom text-white rounded ps-2 mb-3">Events</h1>
                               </div>
                               <?php
                               $event_Q = $db->query("CALL `get_events`()");
