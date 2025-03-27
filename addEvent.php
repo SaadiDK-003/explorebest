@@ -148,7 +148,7 @@ if ($userRole != 'local') {
             <div class="modal-content">
                 <form id="updateEventContent">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="updEventModalLabel">Update Place</h1>
+                        <h1 class="modal-title fs-5" id="updEventModalLabel">Update Event</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
