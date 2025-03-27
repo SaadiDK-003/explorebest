@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2025 at 01:27 PM
+-- Generation Time: Mar 27, 2025 at 07:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -50,9 +50,33 @@ FROM accommodation a
 INNER JOIN cities c ON a.city_id=c.id
 ORDER BY a.id DESC$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_acc_by_id` (IN `acc_id` INT)   SELECT
+a.id AS 'acc_id',
+c.id AS 'city_id',
+c.city_name,
+a.type,
+a.location,
+a.services
+FROM accommodation a
+INNER JOIN cities c ON a.city_id=c.id
+WHERE a.id=acc_id$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_acc_types` ()   SELECT
 *
 FROM accommodation_types$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_acc_user` (IN `user_id` INT)   SELECT
+a.id AS 'acc_id',
+c.city_name,
+a.type,
+a.location,
+a.accommodation_image,
+a.services,
+a.status
+FROM accommodation a
+INNER JOIN cities c ON a.city_id=c.id
+WHERE a.u_id=user_id
+ORDER BY a.id DESC$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cities` ()   SELECT
 *
@@ -84,6 +108,30 @@ FROM events e
 INNER JOIN cities c ON e.city_id=c.id
 ORDER BY e.id DESC$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_events_user` (IN `user_id` INT)   SELECT
+e.id AS 'event_id',
+c.city_name,
+e.event_name,
+e.date,
+e.booking_link,
+e.event_img,
+e.status
+FROM events e
+INNER JOIN cities c ON e.city_id=c.id
+WHERE e.u_id=user_id
+ORDER BY e.id DESC$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_event_by_id` (IN `event_id` INT)   SELECT
+e.id AS 'event_id',
+c.id AS 'city_id',
+c.city_name,
+e.event_name,
+e.date,
+e.booking_link
+FROM events e
+INNER JOIN cities c ON e.city_id=c.id
+WHERE e.id=event_id$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_places` ()   SELECT
 p.id AS 'place_id',
 c.city_name,
@@ -108,6 +156,29 @@ p.status
 FROM places p
 INNER JOIN cities c ON p.city_id=c.id
 ORDER BY p.id DESC$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_places_by_id` (IN `place_id` INT)   SELECT
+p.id AS 'place_id',
+c.id AS 'city_id',
+c.city_name,
+p.type,
+p.location,
+p.description
+FROM places p
+INNER JOIN cities c ON p.city_id=c.id
+WHERE p.id=place_id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_places_user` (IN `user_id` INT)   SELECT
+p.id AS 'place_id',
+c.city_name,
+p.type,
+p.location,
+p.place_img,
+p.description,
+p.status
+FROM places p
+INNER JOIN cities c ON p.city_id=c.id
+WHERE p.u_id=user_id ORDER BY p.id DESC$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_place_types` ()   SELECT
 *

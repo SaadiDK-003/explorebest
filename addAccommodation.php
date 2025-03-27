@@ -82,14 +82,125 @@ if ($userRole != 'local') {
                     </form>
                 </div>
             </div>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <table id="acc-table"
+                        class="table table-bordered table-striped table-responsive text-center align-middle">
+                        <thead>
+                            <tr>
+                                <th class="text-center">City Name</th>
+                                <th class="text-center">Type</th>
+                                <th class="text-center">Location</th>
+                                <th class="text-center">Services</th>
+                                <th class="text-center">Image</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $acc_Q = $db->query("CALL `get_acc_user`($userid)");
+                            if ($acc_Q->num_rows > 0):
+                                while ($acc = $acc_Q->fetch_object()):
+                                    $status = $acc->status;
+                                    ?>
+
+                                    <tr>
+                                        <td class="text-center"><?= $acc->city_name ?></td>
+                                        <td class="text-center"><?= $acc->type ?></td>
+                                        <td class="text-center"><?= $acc->location ?></td>
+                                        <td class="text-center"><?= $acc->services ?></td>
+                                        <td class="text-center">
+                                            <img src="<?= env("SITE_URL") ?><?= $acc->accommodation_image ?>" width="80"
+                                                height="80" class="d-block mx-auto rounded" alt="acc_<?= $acc->acc_id ?>">
+                                        </td>
+                                        <td class="text-center">
+                                            <?= $status == '0' ? '<span class="btn btn-sm btn-warning">Pending</span>' : '<span class="btn btn-sm btn-success">Active</span>' ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#!" data-id="<?= $acc->acc_id ?>" data-bs-toggle="modal"
+                                                data-bs-target="#placeModal" data-msg="Place"
+                                                class="btn btn-sm btn-warning btn-upd-acc-img"><i class="fas fa-image"></i></a>
+                                            <a href="#!" data-id="<?= $acc->acc_id ?>" data-bs-toggle="modal"
+                                                data-bs-target="#updAccModal" data-table="accommodation"
+                                                class="btn btn-sm btn-primary btn-upd-acc"><i class="fas fa-edit"></i></a>
+                                            <a href="#!" data-id="<?= $acc->acc_id ?>" data-table="accommodation"
+                                                data-msg="Accommodation" class="btn btn-sm btn-danger btn-del"><i
+                                                    class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+
+                                    <?php
+                                endwhile;
+                            endif;
+                            $acc_Q->close();
+                            $db->next_result();
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </main>
+
+    <!-- Modal -->
+    <div class="modal fade" id="updAccModal" tabindex="-1" aria-labelledby="updAccModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="updateAccContent">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="updAccModalLabel">Update Accommodation</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_city" class="form-label">City</label>
+                                    <select name="city_id" id="upd_city" class="form-select" required>
+                                        <option value="" selected hidden>Select City</option>
+                                        <?= cityList() ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_type" class="form-label">Type</label>
+                                    <select name="type" id="upd_type" class="form-select" required>
+                                        <option value="" selected hidden>Select Type</option>
+                                        <?= AccommodationTypes() ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_location" class="form-label">Location</label>
+                                    <input type="text" name="location" id="upd_location" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_services" class="form-label">Services</label>
+                                    <input type="text" name="services" id="upd_services" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="upd_acc_id" name="upd_acc_id">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <?php include_once "includes/footer.php"; ?>
     <?php include_once "includes/external_js.php"; ?>
 
     <script>
         $(document).ready(function () {
-            new DataTable("#cities", {
+            new DataTable("#acc-table", {
                 info: false,
                 ordering: false,
                 pageLength: 5,
@@ -97,49 +208,39 @@ if ($userRole != 'local') {
                     topStart: null
                 }
             });
-            // Add City
-            $("#add_city_form").on("submit", function (e) {
-                e.preventDefault();
-                let formData = $(this).serialize();
-
-                $.ajax({
-                    url: "ajax/city.php",
-                    method: "post",
-                    data: formData,
-                    success: function (response) {
-                        let res = JSON.parse(response);
-                        if (res.status == "success") {
-                            $("#ToastSuccess").addClass("fade show");
-                            $("#ToastSuccess .toast-body").html(res.msg);
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 2000);
-                        } else {
-                            $("#ToastDanger").addClass("fade show");
-                            $("#ToastDanger .toast-body").html(res.msg);
-                        }
-                    }
-                });
-            });
 
 
-            $(document).on("click", ".btn-upd-city", function (e) {
+            // Fetch Content
+            $(document).on("click", ".btn-upd-acc", function (e) {
                 e.preventDefault();
                 let id = $(this).data("id");
-                let city = $(this).data("city");
-                $(".city_form").attr("id", "upd_city_form");
-                $(".city_form").find("#city_name").attr("name", "city_update").val(city);
-                $("input[name='city_id']").val(id);
-                $(".city_form").find("button").text("Update");
+
+                $.ajax({
+                    url: "ajax/upd_acc.php",
+                    method: "POST",
+                    data: {
+                        acc_id: id
+                    },
+                    success: function (response) {
+                        let res = JSON.parse(response);
+                        console.log(res);
+                        $("#upd_acc_id").val(res.acc_id);
+                        $("#upd_city").children('option[selected]').val(res.city_id).text(res.city_name);
+                        $("#upd_type").children('option[selected]').val(res.type).text(res.type);
+                        $("#upd_location").val(res.location);
+                        $("#upd_services").val(res.services);
+                    }
+                });
+
             });
 
-            // Update City
-            $("#upd_city_form").on("submit", function (e) {
+            // Update Accommodation
+            $("#updateAccContent").on("submit", function (e) {
                 e.preventDefault();
                 let formData = $(this).serialize();
 
                 $.ajax({
-                    url: "ajax/city.php",
+                    url: "ajax/upd_acc.php",
                     method: "post",
                     data: formData,
                     success: function (response) {

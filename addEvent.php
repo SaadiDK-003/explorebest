@@ -81,14 +81,124 @@ if ($userRole != 'local') {
                     </form>
                 </div>
             </div>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <table id="event-table"
+                        class="table table-bordered table-striped table-responsive text-center align-middle">
+                        <thead>
+                            <tr>
+                                <th class="text-center">City Name</th>
+                                <th class="text-center">Event Name</th>
+                                <th class="text-center">Date</th>
+                                <th class="text-center">Booking Link</th>
+                                <th class="text-center">Event Img</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $events_Q = $db->query("CALL `get_events_user`($userid)");
+                            if ($events_Q->num_rows > 0):
+                                while ($event = $events_Q->fetch_object()):
+                                    $status = $event->status;
+                                    ?>
+
+                                    <tr>
+                                        <td class="text-center"><?= $event->city_name ?></td>
+                                        <td class="text-center"><?= $event->event_name ?></td>
+                                        <td class="text-center"><?= $event->date ?></td>
+                                        <td class="text-center"><?= $event->booking_link ?></td>
+                                        <td class="text-center">
+                                            <img src="<?= env("SITE_URL") ?><?= $event->event_img ?>" width="80" height="80"
+                                                class="d-block mx-auto rounded" alt="event_<?= $event->event_id ?>">
+                                        </td>
+                                        <td class="text-center">
+                                            <?= $status == '0' ? '<span class="btn btn-sm btn-warning">Pending</span>' : '<span class="btn btn-sm btn-success">Active</span>' ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#!" data-id="<?= $event->event_id ?>" data-bs-toggle="modal"
+                                                data-bs-target="#placeModal" data-msg="Place"
+                                                class="btn btn-sm btn-warning btn-upd-event-img"><i
+                                                    class="fas fa-image"></i></a>
+                                            <a href="#!" data-id="<?= $event->event_id ?>" data-bs-toggle="modal"
+                                                data-bs-target="#updEventModal" data-table="events"
+                                                class="btn btn-sm btn-primary btn-upd-event"><i class="fas fa-edit"></i></a>
+                                            <a href="#!" data-id="<?= $event->event_id ?>" data-table="events" data-msg="Event"
+                                                class="btn btn-sm btn-danger btn-del"><i class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+
+                                    <?php
+                                endwhile;
+                            endif;
+                            $events_Q->close();
+                            $db->next_result();
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </main>
+
+    <!-- Modal -->
+    <div class="modal fade" id="updEventModal" tabindex="-1" aria-labelledby="updEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="updateEventContent">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="updEventModalLabel">Update Place</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_city" class="form-label">City</label>
+                                    <select name="city_id" id="upd_city" class="form-select" required>
+                                        <option value="" selected hidden>Select City</option>
+                                        <?= cityList() ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_event_name" class="form-label">Event Name</label>
+                                    <input type="text" name="event_name" id="upd_event_name" class="form-control"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_date" class="form-label">Event Date</label>
+                                    <input type="date" name="date" id="upd_date" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_booking_link" class="form-label">Booking Link</label>
+                                    <input type="text" name="booking_link" id="upd_booking_link" class="form-control"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="upd_event_id" name="upd_event_id">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <?php include_once "includes/footer.php"; ?>
     <?php include_once "includes/external_js.php"; ?>
 
     <script>
         $(document).ready(function () {
-            new DataTable("#cities", {
+            new DataTable("#event-table", {
                 info: false,
                 ordering: false,
                 pageLength: 5,
@@ -96,49 +206,38 @@ if ($userRole != 'local') {
                     topStart: null
                 }
             });
-            // Add City
-            $("#add_city_form").on("submit", function (e) {
-                e.preventDefault();
-                let formData = $(this).serialize();
 
-                $.ajax({
-                    url: "ajax/city.php",
-                    method: "post",
-                    data: formData,
-                    success: function (response) {
-                        let res = JSON.parse(response);
-                        if (res.status == "success") {
-                            $("#ToastSuccess").addClass("fade show");
-                            $("#ToastSuccess .toast-body").html(res.msg);
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 2000);
-                        } else {
-                            $("#ToastDanger").addClass("fade show");
-                            $("#ToastDanger .toast-body").html(res.msg);
-                        }
-                    }
-                });
-            });
-
-
-            $(document).on("click", ".btn-upd-city", function (e) {
+            // Fetch Content
+            $(document).on("click", ".btn-upd-event", function (e) {
                 e.preventDefault();
                 let id = $(this).data("id");
-                let city = $(this).data("city");
-                $(".city_form").attr("id", "upd_city_form");
-                $(".city_form").find("#city_name").attr("name", "city_update").val(city);
-                $("input[name='city_id']").val(id);
-                $(".city_form").find("button").text("Update");
+
+                $.ajax({
+                    url: "ajax/upd_event.php",
+                    method: "POST",
+                    data: {
+                        event_id: id
+                    },
+                    success: function (response) {
+                        let res = JSON.parse(response);
+                        console.log(res);
+                        $("#upd_event_id").val(res.event_id);
+                        $("#upd_city").children('option[selected]').val(res.city_id).text(res.city_name);
+                        $("#upd_event_name").val(res.event_name);
+                        $("#upd_date").val(res.date);
+                        $("#upd_booking_link").val(res.booking_link);
+                    }
+                });
+
             });
 
-            // Update City
-            $("#upd_city_form").on("submit", function (e) {
+            // Update Event
+            $("#updateEventContent").on("submit", function (e) {
                 e.preventDefault();
                 let formData = $(this).serialize();
 
                 $.ajax({
-                    url: "ajax/city.php",
+                    url: "ajax/upd_event.php",
                     method: "post",
                     data: formData,
                     success: function (response) {
@@ -156,7 +255,6 @@ if ($userRole != 'local') {
                     }
                 });
             });
-
 
             // Delete
             $(document).on("click", ".btn-del", function (e) {
