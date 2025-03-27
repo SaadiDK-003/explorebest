@@ -119,7 +119,7 @@ if ($userRole != 'local') {
                                         </td>
                                         <td class="text-center">
                                             <a href="#!" data-id="<?= $acc->acc_id ?>" data-bs-toggle="modal"
-                                                data-bs-target="#placeModal" data-msg="Place"
+                                                data-bs-target="#updAccImageModal" data-msg="Place"
                                                 class="btn btn-sm btn-warning btn-upd-acc-img"><i class="fas fa-image"></i></a>
                                             <a href="#!" data-id="<?= $acc->acc_id ?>" data-bs-toggle="modal"
                                                 data-bs-target="#updAccModal" data-table="accommodation"
@@ -195,6 +195,37 @@ if ($userRole != 'local') {
             </div>
         </div>
     </div>
+
+    <!-- Modal Image -->
+    <div class="modal fade" id="updAccImageModal" tabindex="-1" aria-labelledby="updAccImageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <form id="updateAccImg" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="updAccImageModalLabel">Upd Accomm. Image</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_acc_img" class="form-label">Accommodation Image</label>
+                                    <input type="file" name="accommodation_image" id="upd_acc_img" class="form-control"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="acc_img_upd_id" name="acc_img_upd_id">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <?php include_once "includes/footer.php"; ?>
     <?php include_once "includes/external_js.php"; ?>
 
@@ -259,6 +290,40 @@ if ($userRole != 'local') {
                 });
             });
 
+            // set ID for Image Upload
+            $(document).on("click", ".btn-upd-acc-img", function (e) {
+                e.preventDefault();
+                let id = $(this).data("id");
+                $("#acc_img_upd_id").val(id);
+            });
+
+            // Update Image
+            $("#updateAccImg").on("submit", function (e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: "ajax/upload.php",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        let res = JSON.parse(response);
+                        if (res.status == "success") {
+                            $("#ToastSuccess").addClass("fade show");
+                            $("#ToastSuccess .toast-body").html(res.msg);
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                        } else {
+                            $("#ToastDanger").addClass("fade show");
+                            $("#ToastDanger .toast-body").html(res.msg);
+                        }
+                    }
+                });
+            });
 
             // Delete
             $(document).on("click", ".btn-del", function (e) {

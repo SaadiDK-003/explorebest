@@ -118,7 +118,7 @@ if ($userRole != 'local') {
                                         </td>
                                         <td class="text-center">
                                             <a href="#!" data-id="<?= $event->event_id ?>" data-bs-toggle="modal"
-                                                data-bs-target="#placeModal" data-msg="Place"
+                                                data-bs-target="#updEventImgModal" data-msg="Place"
                                                 class="btn btn-sm btn-warning btn-upd-event-img"><i
                                                     class="fas fa-image"></i></a>
                                             <a href="#!" data-id="<?= $event->event_id ?>" data-bs-toggle="modal"
@@ -193,6 +193,37 @@ if ($userRole != 'local') {
             </div>
         </div>
     </div>
+
+    <!-- Modal Image -->
+    <div class="modal fade" id="updEventImgModal" tabindex="-1" aria-labelledby="updEventImgModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <form id="updateEventImg" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="updEventImgModalLabel">Update Event Image</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_event_img" class="form-label">Event Image</label>
+                                    <input type="file" name="event_img" id="upd_event_img" class="form-control"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="event_img_upd_id" name="event_img_upd_id">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <?php include_once "includes/footer.php"; ?>
     <?php include_once "includes/external_js.php"; ?>
 
@@ -240,6 +271,41 @@ if ($userRole != 'local') {
                     url: "ajax/upd_event.php",
                     method: "post",
                     data: formData,
+                    success: function (response) {
+                        let res = JSON.parse(response);
+                        if (res.status == "success") {
+                            $("#ToastSuccess").addClass("fade show");
+                            $("#ToastSuccess .toast-body").html(res.msg);
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                        } else {
+                            $("#ToastDanger").addClass("fade show");
+                            $("#ToastDanger .toast-body").html(res.msg);
+                        }
+                    }
+                });
+            });
+
+            // set ID for Image Upload
+            $(document).on("click", ".btn-upd-event-img", function (e) {
+                e.preventDefault();
+                let id = $(this).data("id");
+                $("#event_img_upd_id").val(id);
+            });
+
+            // Update Image
+            $("#updateEventImg").on("submit", function (e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: "ajax/upload.php",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function (response) {
                         let res = JSON.parse(response);
                         if (res.status == "success") {

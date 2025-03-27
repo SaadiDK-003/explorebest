@@ -122,7 +122,7 @@ if ($userRole != 'local') {
                                         <td class="text-center">
                                             <!-- img upd -->
                                             <a href="#!" data-id="<?= $place->place_id ?>" data-bs-toggle="modal"
-                                                data-bs-target="#placeModal" data-msg="Place"
+                                                data-bs-target="#placeImgModal" data-table="places"
                                                 class="btn btn-sm btn-warning btn-upd-place-img"><i
                                                     class="fas fa-image"></i></a>
                                             <!-- content upd -->
@@ -202,6 +202,36 @@ if ($userRole != 'local') {
         </div>
     </div>
 
+    <!-- Modal Image -->
+    <div class="modal fade" id="placeImgModal" tabindex="-1" aria-labelledby="placeImgModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <form id="updatePlaceImg" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="placeImgModalLabel">Update Place Image</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_place_img" class="form-label">Place Image</label>
+                                    <input type="file" name="place_image" id="upd_place_img" class="form-control"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="place_img_upd_id" name="place_img_upd_id">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <?php include_once "includes/footer.php"; ?>
     <?php include_once "includes/external_js.php"; ?>
 
@@ -236,7 +266,6 @@ if ($userRole != 'local') {
                         $("#upd_description").val(res.description);
                     }
                 });
-
             });
 
             // Update Place
@@ -248,6 +277,41 @@ if ($userRole != 'local') {
                     url: "ajax/upd_place.php",
                     method: "post",
                     data: formData,
+                    success: function (response) {
+                        let res = JSON.parse(response);
+                        if (res.status == "success") {
+                            $("#ToastSuccess").addClass("fade show");
+                            $("#ToastSuccess .toast-body").html(res.msg);
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                        } else {
+                            $("#ToastDanger").addClass("fade show");
+                            $("#ToastDanger .toast-body").html(res.msg);
+                        }
+                    }
+                });
+            });
+
+            // set ID for Image Upload
+            $(document).on("click", ".btn-upd-place-img", function (e) {
+                e.preventDefault();
+                let id = $(this).data("id");
+                $("#place_img_upd_id").val(id);
+            });
+
+            // Update Image
+            $("#updatePlaceImg").on("submit", function (e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: "ajax/upload.php",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function (response) {
                         let res = JSON.parse(response);
                         if (res.status == "success") {
