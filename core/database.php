@@ -8,6 +8,7 @@ function env($value)
 }
 $db = mysqli_connect(env("HOST"), env("USER"), env("PWD"), env("DB"));
 error_reporting((int) env("ERROR_REPORT"));
+date_default_timezone_set(env("DEFAULT_TIMEZONE"));
 $tailwind = env("TAILWIND");
 $alpineJs = env("ALPINE_JS");
 

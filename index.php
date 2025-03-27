@@ -62,26 +62,32 @@ require_once 'core/database.php';
                               </div>
                               <?php
                               $places_Q = $db->query("CALL `get_places`()");
-                              while ($place_ = $places_Q->fetch_object()):
-                                    ?>
-                                    <div class="col-12 col-md-3 mb-3">
-                                          <div class="content bg-white p-2 rounded">
-                                                <div class="img">
-                                                      <img src="<?= $place_->place_img ?>" alt="restaurant">
+                              if (mysqli_num_rows($places_Q) > 0) {
+                                    while ($place_ = $places_Q->fetch_object()):
+                                          ?>
+                                          <div class="col-12 col-md-3 mb-3">
+                                                <div class="content bg-white p-2 rounded">
+                                                      <div class="img">
+                                                            <img src="<?= $place_->place_img ?>" alt="restaurant">
+                                                      </div>
+                                                      <hr>
+                                                      <div class="info d-flex align-items-center justify-content-between">
+                                                            <h3><?= $place_->city_name ?></h3>
+                                                            <h5 class="btn btn-sm btn-secondary"><?= $place_->type ?></h5>
+                                                      </div>
+                                                      <p>
+                                                            <?= $place_->description ?>
+                                                      </p>
+                                                      <a href="<?= $place_->location ?>" target="_blank"
+                                                            class="btn btn-primary w-100">Location</a>
                                                 </div>
-                                                <hr>
-                                                <div class="info d-flex align-items-center justify-content-between">
-                                                      <h3><?= $place_->city_name ?></h3>
-                                                      <h5 class="btn btn-sm btn-secondary"><?= $place_->type ?></h5>
-                                                </div>
-                                                <p>
-                                                      <?= $place_->description ?>
-                                                </p>
-                                                <a href="<?= $place_->location ?>" target="_blank"
-                                                      class="btn btn-primary w-100">Location</a>
                                           </div>
+                                    <?php endwhile;
+                              } else { ?>
+                                    <div class="col-12">
+                                          <h1 class="text-center alert alert-info">No Record Found</h1>
                                     </div>
-                              <?php endwhile;
+                              <?php }
                               $places_Q->close();
                               $db->next_result(); ?>
                         </div>
@@ -96,26 +102,35 @@ require_once 'core/database.php';
                               </div>
                               <?php
                               $acc_Q = $db->query("CALL `get_acc`()");
-                              while ($acc_ = $acc_Q->fetch_object()):
-                                    ?>
-                                    <div class="col-12 col-md-3 mb-3">
-                                          <div class="content bg-white p-2 rounded">
-                                                <div class="img">
-                                                      <img src="<?= $acc_->acc_img ?>" alt="restaurant">
+                              if (mysqli_num_rows($acc_Q) > 0) {
+                                    while ($acc_ = $acc_Q->fetch_object()):
+                                          $services = explode(",", $acc_->services);
+                                          ?>
+                                          <div class="col-12 col-md-3 mb-3">
+                                                <div class="content bg-white p-2 rounded">
+                                                      <div class="img">
+                                                            <img src="<?= $acc_->acc_img ?>" alt="restaurant">
+                                                      </div>
+                                                      <hr>
+                                                      <div class="info d-flex align-items-center justify-content-between">
+                                                            <h3><?= $acc_->city_name ?></h3>
+                                                            <h5 class="btn btn-sm btn-secondary"><?= $acc_->type ?></h5>
+                                                      </div>
+                                                      <ul>
+                                                            <?php foreach ($services as $service) {
+                                                                  echo '<li>' . $service . '</li>';
+                                                            } ?>
+                                                      </ul>
+                                                      <a href="<?= $acc_->location ?>" target="_blank"
+                                                            class="btn btn-primary w-100">Location</a>
                                                 </div>
-                                                <hr>
-                                                <div class="info d-flex align-items-center justify-content-between">
-                                                      <h3><?= $acc_->city_name ?></h3>
-                                                      <h5 class="btn btn-sm btn-secondary"><?= $acc_->type ?></h5>
-                                                </div>
-                                                <p>
-                                                      <?= $acc_->services ?>
-                                                </p>
-                                                <a href="<?= $acc_->location ?>" target="_blank"
-                                                      class="btn btn-primary w-100">Location</a>
                                           </div>
+                                    <?php endwhile;
+                              } else { ?>
+                                    <div class="col-12">
+                                          <h1 class="text-center alert alert-info">No Record Found</h1>
                                     </div>
-                              <?php endwhile;
+                              <?php }
                               $acc_Q->close();
                               $db->next_result(); ?>
                         </div>
@@ -130,24 +145,30 @@ require_once 'core/database.php';
                               </div>
                               <?php
                               $event_Q = $db->query("CALL `get_events`()");
-                              while ($event_ = $event_Q->fetch_object()):
-                                    ?>
-                                    <div class="col-12 col-md-3 mb-3">
-                                          <div class="content bg-white p-2 rounded">
-                                                <div class="img">
-                                                      <img src="<?= $event_->event_img ?>" alt="restaurant">
-                                                </div>
-                                                <hr>
-                                                <div class="info d-flex align-items-center justify-content-between">
-                                                      <h3><?= $event_->event_name ?></h3>
-                                                      <h5 class="btn btn-sm btn-secondary"><?= $event_->city_name ?></h5>
-                                                </div>
+                              if (mysqli_num_rows($event_Q) > 0) {
+                                    while ($event_ = $event_Q->fetch_object()):
+                                          ?>
+                                          <div class="col-12 col-md-3 mb-3">
+                                                <div class="content bg-white p-2 rounded">
+                                                      <div class="img">
+                                                            <img src="<?= $event_->event_img ?>" alt="restaurant">
+                                                      </div>
+                                                      <hr>
+                                                      <div class="info d-flex align-items-center justify-content-between">
+                                                            <h3><?= $event_->event_name ?></h3>
+                                                            <h5 class="btn btn-sm btn-secondary"><?= $event_->city_name ?></h5>
+                                                      </div>
 
-                                                <a href="<?= $event_->booking_link ?>" target="_blank"
-                                                      class="btn btn-primary w-100">Booking Link</a>
+                                                      <a href="<?= $event_->booking_link ?>" target="_blank"
+                                                            class="btn btn-primary w-100">Booking Link</a>
+                                                </div>
                                           </div>
+                                    <?php endwhile;
+                              } else { ?>
+                                    <div class="col-12">
+                                          <h1 class="text-center alert alert-info">No Record Found</h1>
                                     </div>
-                              <?php endwhile;
+                              <?php }
                               $event_Q->close();
                               $db->next_result(); ?>
                         </div>

@@ -70,7 +70,9 @@ if ($userRole != 'local') {
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="services" class="form-label">Services</label>
-                                    <input type="text" name="services" id="services" class="form-control" required>
+                                    <input type="text" name="services" id="services" class="form-control"
+                                        placeholder="e.g. wifi,parking" required>
+                                    <code>Write Services comma separated</code>
                                 </div>
                             </div>
                             <div class="col-12">
