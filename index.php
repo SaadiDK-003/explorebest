@@ -158,7 +158,10 @@ require_once 'core/database.php';
                                                             <h3><?= $event_->event_name ?></h3>
                                                             <h5 class="btn btn-sm btn-secondary"><?= $event_->city_name ?></h5>
                                                       </div>
-
+                                                      <p>
+                                                            <strong>Event Date: </strong>
+                                                            <?= date('d-M-Y', strtotime($event_->date)) ?>
+                                                      </p>
                                                       <a href="<?= $event_->booking_link ?>" target="_blank"
                                                             class="btn btn-primary w-100">Booking Link</a>
                                                 </div>
