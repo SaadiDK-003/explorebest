@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 27, 2025 at 08:30 PM
+-- Generation Time: Mar 28, 2025 at 02:17 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -208,7 +208,7 @@ CREATE TABLE `accommodation` (
 --
 
 INSERT INTO `accommodation` (`id`, `city_id`, `type`, `location`, `accommodation_image`, `services`, `u_id`, `status`) VALUES
-(2, 3, 'hotel', 'https://www.elafhotels.com/elaf-al-taqwa', './img/accommodation/hotel.jpg', 'Private parking,Free WiFi', 3, '1');
+(4, 2, 'apartment', 'Sharjah', './img/accommodation/restaurant.jpg', 'Private parking,Free WiFi', 3, '1');
 
 -- --------------------------------------------------------
 
@@ -218,7 +218,7 @@ INSERT INTO `accommodation` (`id`, `city_id`, `type`, `location`, `accommodation
 
 CREATE TABLE `accommodation_types` (
   `id` int(11) NOT NULL,
-  `types` enum('apartment','hotel','chalet') NOT NULL DEFAULT 'hotel'
+  `types` varchar(255) NOT NULL DEFAULT 'hotel'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -266,13 +266,6 @@ CREATE TABLE `events` (
   `status` enum('0','1') NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `events`
---
-
-INSERT INTO `events` (`id`, `city_id`, `event_name`, `date`, `booking_link`, `event_img`, `u_id`, `status`) VALUES
-(2, 2, 'Nora Santos', '2025-04-03', 'Eos sunt fuga Vero ', './img/event_/explore_bg.webp', 3, '1');
-
 -- --------------------------------------------------------
 
 --
@@ -306,7 +299,7 @@ INSERT INTO `places` (`id`, `city_id`, `type`, `location`, `place_img`, `descrip
 
 CREATE TABLE `place_types` (
   `id` int(11) NOT NULL,
-  `types` enum('restaurant','cafe') NOT NULL DEFAULT 'restaurant'
+  `types` varchar(255) NOT NULL DEFAULT 'restaurant'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -401,7 +394,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `accommodation`
 --
 ALTER TABLE `accommodation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `accommodation_types`
@@ -419,7 +412,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `places`
@@ -431,7 +424,7 @@ ALTER TABLE `places`
 -- AUTO_INCREMENT for table `place_types`
 --
 ALTER TABLE `place_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`

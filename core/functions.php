@@ -251,3 +251,14 @@ function addEvent($POST, $FILE, $userid)
 
       echo $msg;
 }
+
+function checkPlaceTypeExist($type, $table)
+{
+      global $db;
+      $checkTypeExist = $db->query("SELECT `types` FROM `$table` WHERE `types`='$type'");
+      if (mysqli_num_rows($checkTypeExist) > 0) {
+            return true;
+      } else {
+            return false;
+      }
+}
