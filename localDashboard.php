@@ -26,10 +26,12 @@ if ($userRole != 'local') {
         <div class="container my-5">
             <div class="row">
                 <div class="col-12">
-                    <div class="buttons_wrapper text-center">
+                    <div class="buttons_wrapper text-center position-relative">
                         <a href="./addPlace.php" class="btn btn-primary mb-3">Add Places</a>
                         <a href="./addAccommodation.php" class="btn btn-secondary mb-3">Add Accommodations</a>
                         <a href="./addEvent.php" class="btn btn-warning mb-3">Add Event</a>
+                        <a href="./edit_profile.php" class="btn btn-primary profile-btn position-absolute">Edit
+                            Profile</a>
                     </div>
                 </div>
             </div>

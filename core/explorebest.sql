@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2025 at 07:16 PM
+-- Generation Time: Mar 30, 2025 at 12:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -269,15 +269,6 @@ CREATE TABLE `comments` (
   `comment_date` date DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `comments`
---
-
-INSERT INTO `comments` (`id`, `comment`, `rating`, `tourist_id`, `place_id`, `comment_date`) VALUES
-(4, 'very good.', 5, 2, 11, '2025-03-29'),
-(5, 'emm coffee was ok.', 4, 4, 11, '2025-03-29'),
-(6, 'so so.', 3, 2, 12, '2025-03-29');
-
 -- --------------------------------------------------------
 
 --
@@ -311,14 +302,6 @@ CREATE TABLE `places` (
   `u_id` int(11) NOT NULL,
   `status` enum('0','1') DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `places`
---
-
-INSERT INTO `places` (`id`, `city_id`, `type`, `location`, `place_img`, `description`, `u_id`, `status`) VALUES
-(11, 3, 'restaurant', 'Beautiful Place', './img/place/hotel.jpg', 'good coffee that is perfect for work :D', 3, '1'),
-(12, 2, 'cafe', 'public_html', './img/place/restaurant.jpg', 'I want cold Coffee on Friday, it should be a best one you got.', 3, '1');
 
 -- --------------------------------------------------------
 
@@ -393,8 +376,8 @@ ALTER TABLE `cities`
 --
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `place_id` (`place_id`),
-  ADD KEY `tourist_id` (`tourist_id`);
+  ADD KEY `tourist_id` (`tourist_id`),
+  ADD KEY `comments_ibfk_1` (`place_id`);
 
 --
 -- Indexes for table `events`
@@ -450,7 +433,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `events`
@@ -462,7 +445,7 @@ ALTER TABLE `events`
 -- AUTO_INCREMENT for table `places`
 --
 ALTER TABLE `places`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `place_types`
@@ -491,7 +474,7 @@ ALTER TABLE `accommodation`
 -- Constraints for table `comments`
 --
 ALTER TABLE `comments`
-  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`),
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`tourist_id`) REFERENCES `users` (`id`);
 
 --

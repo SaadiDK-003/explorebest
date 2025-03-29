@@ -273,3 +273,98 @@ function checkCommentExist($tourist_id, $place_id)
             return false;
       }
 }
+
+function checkEmail($email, $id)
+{
+      global $db;
+      $checkEmailExist = $db->query("SELECT * FROM `users` WHERE `email`='$email' AND `id`!='$id'");
+      if (mysqli_num_rows($checkEmailExist) > 0) {
+            return true;
+      } else {
+            return false;
+      }
+}
+function checkUsername($username, $id)
+{
+      global $db;
+      $checkUsernameExist = $db->query("SELECT * FROM `users` WHERE `username`='$username' AND `id`!='$id'");
+      if (mysqli_num_rows($checkUsernameExist) > 0) {
+            return true;
+      } else {
+            return false;
+      }
+}
+
+function checkValueExists($column, $value, $id)
+{
+      global $db;
+      $stmt = $db->prepare("SELECT COUNT(*) FROM `users` WHERE `$column` = ? AND `id` != ?");
+      $stmt->bind_param("si", $value, $id);
+      $stmt->execute();
+      $stmt->bind_result($count);
+      $stmt->fetch();
+      $stmt->close();
+
+      return $count > 0;
+}
+
+function editProfile($POST, $userid)
+{
+      global $db;
+      $id = $userid;
+      $username = $POST['username'];
+      $email = $POST['email'];
+      $pwd = $POST['password'];
+      $old_pwd = $POST['old_password'];
+      $new_pwd = '';
+      $msg = '';
+
+      $checkEmail = checkValueExists('email', $email, $id);
+
+      if ($checkEmail) {
+            $msg = '<h6 class="alert alert-danger text-center">Email already used.</h6>';
+      }
+      if (!$checkEmail) {
+
+            if ($pwd == '') {
+                  $new_pwd = $old_pwd;
+            } else {
+                  $new_pwd = md5($pwd);
+            }
+
+            $updUser = $db->query("UPDATE `users` SET `username`='$username', `email`='$email', `password`='$new_pwd' WHERE `id`='$id'");
+            if ($updUser) {
+                  $msg = '<h6 class="alert alert-success text-center">Updated Successfully.</h6>
+                  <script>
+                        setTimeout(function(){
+                              window.location.href = "./edit_profile.php";
+                        },1500);
+                  </script>
+                  ';
+            }
+      }
+
+      echo $msg;
+}
+
+function forgetPassword($email)
+{
+      global $db;
+      $msg = '';
+      $checkQ = $db->query("SELECT * FROM `users` WHERE `email`='$email'");
+      if (mysqli_num_rows($checkQ) > 0) {
+            $bytes = bin2hex(random_bytes(4));
+            $newPwdMD5 = md5($bytes);
+            $db->query("UPDATE `users` SET `password`='$newPwdMD5' WHERE `email`='$email'");
+            $msg = '<h6 class="text-center alert alert-success">Your New Password is: <span class="d-block">' . $bytes . '<span></h6>
+        <script>
+            setTimeout(function(){
+                window.location.href = "./login.php";
+            },10000);
+        </script>
+        ';
+      } else {
+            $msg = '<h6 class="text-center alert alert-danger">Invalid Credentials.</h6>';
+      }
+      return $msg;
+}

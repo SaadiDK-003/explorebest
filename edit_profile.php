@@ -4,11 +4,6 @@ if (!isLoggedIn()) {
     header('Location: login.php');
     exit();
 }
-
-if ($userRole != 'tourist') {
-    header('Location: index.php');
-    exit();
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +11,7 @@ if ($userRole != 'tourist') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= env("TITLE") ?> | Tourist Dashboard</title>
+    <title><?= env("TITLE") ?> | Edit Profile</title>
     <?php include_once "includes/external_css.php"; ?>
 </head>
 
@@ -24,14 +19,50 @@ if ($userRole != 'tourist') {
     <?php include_once "includes/header.php"; ?>
     <main>
         <div class="container my-5">
-            <div class="row">
-                <div class="col-12">
-                    <div class="buttons_wrapper position-relative">
-                        <a href="./edit_profile.php" class="btn btn-primary profile-btn position-absolute">Edit
-                            Profile</a>
+            <form action="" method="post">
+                <div class="row">
+                    <div class="col-12 col-md-4 mx-auto">
+                        <h5 class="text-center">Edit Profile</h5>
+                        <?php if (isset($_POST['submit'])):
+                            editProfile($_POST, $userid);
+                        endif
+                        ?>
                     </div>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-12 col-md-3 mx-auto">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="username" class="form-label">Name</label>
+                                    <input type="text" name="username" id="username" class="form-control"
+                                        value="<?= $userName ?>" required>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="text" name="email" id="email" class="form-control"
+                                        value="<?= $userEmail ?>" required>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="form-group">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="text" name="password" id="password" class="form-control">
+                                    <code>Leave blank, if you don't wanna change.</code>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="form-group d-flex justify-content-end">
+                                    <input type="hidden" name="old_password" value="<?= $userPwd ?>">
+                                    <button type="submit" name="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </main>
     <?php include_once "includes/footer.php"; ?>

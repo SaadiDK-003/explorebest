@@ -21,7 +21,7 @@ if (isLoggedIn()) {
                         <h1><span class="text-primary"><?= env("TITLE") ?></span> <span class="text-secondary">|</span>
                               LOGIN</h1>
                   </div>
-                  <div class="col-12 col-md-4 mx-auto">
+                  <div class="col-12 col-md-3 mx-auto">
                         <?php if (isset($_POST['submit'])):
                               login($_POST);
                         endif; ?>
@@ -47,6 +47,10 @@ if (isLoggedIn()) {
                                                 <button type="submit" name="submit"
                                                       class="btn btn-success">LOGIN</button>
                                           </div>
+                                    </div>
+                                    <div class="col-12 mt-5 text-center">
+                                          <a href="./forgetPassword.php" class="btn btn-sm btn-secondary">Forget
+                                                Password?</a>
                                     </div>
                               </div>
                         </form>

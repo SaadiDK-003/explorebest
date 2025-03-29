@@ -10,7 +10,7 @@
                         <?php elseif ($userRole == 'local'): ?>
                               <a href="<?= env("SITE_URL") ?>localDashboard.php" class="btn btn-primary">Dashboard</a>
                         <?php else: ?>
-                              <!-- <a href="< ?= env("SITE_URL") ?>touristDashboard.php" class="btn btn-primary">Dashboard</a> -->
+                              <a href="<?= env(" SITE_URL") ?>edit_profile.php" class="btn btn-primary">Dashboard</a>
                         <?php endif; ?>
                         <a href="<?= env("SITE_URL") ?>logout.php" class="btn btn-danger">Logout</a>
                   <?php else: ?>
