@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 28, 2025 at 02:17 AM
+-- Generation Time: Mar 29, 2025 at 07:16 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -82,6 +82,17 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cities` ()   SELECT
 *
 FROM cities c 
 ORDER BY c.city_name ASC$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_comments_by_place` (IN `place_id` INT)   SELECT
+c.id AS 'comment_id',
+c.comment,
+c.rating,
+c.comment_date,
+u.username
+FROM comments c
+INNER JOIN places p ON c.place_id=p.id
+INNER JOIN users u ON c.tourist_id=u.id
+WHERE c.place_id=place_id$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_events` ()   SELECT
 e.id AS 'event_id',
@@ -203,13 +214,6 @@ CREATE TABLE `accommodation` (
   `status` enum('0','1') DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `accommodation`
---
-
-INSERT INTO `accommodation` (`id`, `city_id`, `type`, `location`, `accommodation_image`, `services`, `u_id`, `status`) VALUES
-(4, 2, 'apartment', 'Sharjah', './img/accommodation/restaurant.jpg', 'Private parking,Free WiFi', 3, '1');
-
 -- --------------------------------------------------------
 
 --
@@ -228,7 +232,8 @@ CREATE TABLE `accommodation_types` (
 INSERT INTO `accommodation_types` (`id`, `types`) VALUES
 (1, 'apartment'),
 (2, 'chalet'),
-(3, 'hotel');
+(3, 'hotel'),
+(4, 'test_acc');
 
 -- --------------------------------------------------------
 
@@ -248,6 +253,30 @@ CREATE TABLE `cities` (
 INSERT INTO `cities` (`id`, `city_name`) VALUES
 (2, 'Riyadh'),
 (3, 'Madina');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comments`
+--
+
+CREATE TABLE `comments` (
+  `id` int(11) NOT NULL,
+  `comment` varchar(255) NOT NULL,
+  `rating` int(11) NOT NULL,
+  `tourist_id` int(11) NOT NULL,
+  `place_id` int(11) NOT NULL,
+  `comment_date` date DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `comments`
+--
+
+INSERT INTO `comments` (`id`, `comment`, `rating`, `tourist_id`, `place_id`, `comment_date`) VALUES
+(4, 'very good.', 5, 2, 11, '2025-03-29'),
+(5, 'emm coffee was ok.', 4, 4, 11, '2025-03-29'),
+(6, 'so so.', 3, 2, 12, '2025-03-29');
 
 -- --------------------------------------------------------
 
@@ -288,8 +317,8 @@ CREATE TABLE `places` (
 --
 
 INSERT INTO `places` (`id`, `city_id`, `type`, `location`, `place_img`, `description`, `u_id`, `status`) VALUES
-(8, 2, 'restaurant', 'https://g.co/kgs/39vddFX', './img/place/restaurant.jpg', 'good coffee that is perfect for work :D', 3, '1'),
-(9, 3, 'cafe', 'Beautiful Place', './img/place/hotel.jpg', 'good coffee that is perfect for work :D', 3, '1');
+(11, 3, 'restaurant', 'Beautiful Place', './img/place/hotel.jpg', 'good coffee that is perfect for work :D', 3, '1'),
+(12, 2, 'cafe', 'public_html', './img/place/restaurant.jpg', 'I want cold Coffee on Friday, it should be a best one you got.', 3, '1');
 
 -- --------------------------------------------------------
 
@@ -332,7 +361,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `status`) VALUES
 (1, 'admin', 'admin@gmail.com', '4297f44b13955235245b2497399d7a93', 'admin', '1'),
 (2, 'tourist', 'tourist@gmail.com', '4297f44b13955235245b2497399d7a93', 'tourist', '1'),
-(3, 'local', 'local@gmail.com', '4297f44b13955235245b2497399d7a93', 'local', '1');
+(3, 'local', 'local@gmail.com', '4297f44b13955235245b2497399d7a93', 'local', '1'),
+(4, 'James', 'tourist1@gmail.com', '4297f44b13955235245b2497399d7a93', 'tourist', '1');
 
 --
 -- Indexes for dumped tables
@@ -357,6 +387,14 @@ ALTER TABLE `accommodation_types`
 --
 ALTER TABLE `cities`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `place_id` (`place_id`),
+  ADD KEY `tourist_id` (`tourist_id`);
 
 --
 -- Indexes for table `events`
@@ -394,13 +432,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `accommodation`
 --
 ALTER TABLE `accommodation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `accommodation_types`
 --
 ALTER TABLE `accommodation_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -409,28 +447,34 @@ ALTER TABLE `cities`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `places`
 --
 ALTER TABLE `places`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `place_types`
 --
 ALTER TABLE `place_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -442,6 +486,13 @@ ALTER TABLE `users`
 ALTER TABLE `accommodation`
   ADD CONSTRAINT `accommodation_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`),
   ADD CONSTRAINT `accommodation_ibfk_2` FOREIGN KEY (`u_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `comments`
+--
+ALTER TABLE `comments`
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`),
+  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`tourist_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `events`

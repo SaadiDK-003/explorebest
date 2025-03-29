@@ -262,3 +262,14 @@ function checkPlaceTypeExist($type, $table)
             return false;
       }
 }
+
+function checkCommentExist($tourist_id, $place_id)
+{
+      global $db;
+      $checkCommentExist = $db->query("SELECT * FROM `comments` WHERE `tourist_id`='$tourist_id' AND `place_id`='$place_id'");
+      if (mysqli_num_rows($checkCommentExist) > 0) {
+            return true;
+      } else {
+            return false;
+      }
+}

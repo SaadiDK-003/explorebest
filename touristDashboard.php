@@ -5,7 +5,7 @@ if (!isLoggedIn()) {
     exit();
 }
 
-if ($userRole != 'local') {
+if ($userRole != 'tourist') {
     header('Location: index.php');
     exit();
 }
@@ -16,7 +16,7 @@ if ($userRole != 'local') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= env("TITLE") ?> | Local Guide Dashboard</title>
+    <title><?= env("TITLE") ?> | Tourist Dashboard</title>
     <?php include_once "includes/external_css.php"; ?>
 </head>
 
@@ -26,11 +26,7 @@ if ($userRole != 'local') {
         <div class="container my-5">
             <div class="row">
                 <div class="col-12">
-                    <div class="buttons_wrapper text-center">
-                        <a href="./addPlace.php" class="btn btn-primary mb-3">Add Places</a>
-                        <a href="./addAccommodation.php" class="btn btn-secondary mb-3">Add Accommodations</a>
-                        <a href="./addEvent.php" class="btn btn-warning mb-3">Add Event</a>
-                    </div>
+                    
                 </div>
             </div>
         </div>

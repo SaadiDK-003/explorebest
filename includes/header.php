@@ -7,8 +7,10 @@
                   <?php if (isLoggedIn()): ?>
                         <?php if ($userRole == "admin"): ?>
                               <a href="<?= env("SITE_URL") ?>adminDashboard.php" class="btn btn-primary">Dashboard</a>
-                        <?php else: ?>
+                        <?php elseif ($userRole == 'local'): ?>
                               <a href="<?= env("SITE_URL") ?>localDashboard.php" class="btn btn-primary">Dashboard</a>
+                        <?php else: ?>
+                              <!-- <a href="< ?= env("SITE_URL") ?>touristDashboard.php" class="btn btn-primary">Dashboard</a> -->
                         <?php endif; ?>
                         <a href="<?= env("SITE_URL") ?>logout.php" class="btn btn-danger">Logout</a>
                   <?php else: ?>
