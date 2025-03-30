@@ -23,8 +23,10 @@ if (isset($_POST['title']) && isset($_POST['link'])):
             if (in_array($fileType, $allowTypes)) {
                 if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
                     foreach ($_POST as $key => $value) {
-                        $keys .= $key . ',';
-                        $values .= "'" . $value . "',";
+                        if ($key != 'app_id') {
+                            $keys .= $key . ',';
+                            $values .= "'" . $value . "',";
+                        }
                     }
 
                     $keys .= 'image';
@@ -43,9 +45,22 @@ if (isset($_POST['title']) && isset($_POST['link'])):
         }
 
     } catch (\Throwable $th) {
-        $msg = json_encode(["status" => "error", "msg" => "Something Went Wrong."]);
+        $msg = json_encode(["status" => "error", "msg" => $th->getMessage()]);
     }
 
     echo $msg;
 
+endif;
+
+if (isset($_POST['title_update']) && isset($_POST['link_update'])):
+
+    $id = $_POST['app_id'];
+    $title = $_POST['title_update'];
+    $link = $_POST['link_update'];
+
+    $upd_app = $db->query("UPDATE `applications` SET `title`='$title', `link`='$link' WHERE `id`='$id'");
+
+    if ($upd_app) {
+        echo json_encode(["status" => "success", "msg" => "Updated Successfully."]);
+    }
 endif;

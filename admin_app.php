@@ -25,7 +25,7 @@ if ($userRole != 'admin') {
                     </div>
                 </div>
             </div>
-            <form id="add_app_form" enctype="multipart/form-data" class="type_form my-4">
+            <form id="add_app_form" enctype="multipart/form-data" class="app_form my-4">
                 <div class="row">
                     <div class="col-12 col-md-3 mx-auto">
                         <div class="row">
@@ -49,6 +49,7 @@ if ($userRole != 'admin') {
                             </div>
                             <div class="col-12 mb-3">
                                 <div class="form-group d-flex justify-content-end">
+                                    <input type="hidden" name="app_id">
                                     <button type="submit" class="btn btn-success">Add App</button>
                                 </div>
                             </div>
@@ -81,8 +82,9 @@ if ($userRole != 'admin') {
                                                 alt="app-<?= $app->app_id ?>">
                                         </td>
                                         <td>
-                                            <a href="#!" data-id="<?= $app->app_id ?>" data-type="<?= $app->types ?>"
-                                                class="btn btn-sm btn-primary btn-upd-type"><i class="fas fa-pencil"></i></a>
+                                            <a href="#!" data-id="<?= $app->app_id ?>" data-title="<?= $app->title ?>"
+                                                data-link="<?= $app->link ?>" class="btn btn-sm btn-primary btn-upd-app"><i
+                                                    class="fas fa-pencil"></i></a>
                                             <a href="#!" data-id="<?= $app->app_id ?>" data-table="applications" data-msg="App"
                                                 class="btn btn-sm btn-danger btn-del"><i class="fas fa-trash"></i></a>
                                         </td>
@@ -147,24 +149,28 @@ if ($userRole != 'admin') {
             });
 
 
-            $(document).on("click", ".btn-upd-type", function (e) {
+            $(document).on("click", ".btn-upd-app", function (e) {
                 e.preventDefault();
                 let id = $(this).data("id");
-                let type = $(this).data("type");
-                $(".type_form").attr("id", "upd_type_form");
-                $(".type_form").find("#type").attr("name", "type_update").val(type);
-                $("input[name='acc_type_id']").val(id);
-                $("input[name='old_type']").val(type);
-                $(".type_form").find("button").text("Update");
+                let title = $(this).data("title");
+                let link = $(this).data("link");
+                $(".app_form").attr("id", "upd_app_form");
+                $(".app_form").find("#title").attr("name", "title_update").val(title);
+                $(".app_form").find("#link").attr("name", "link_update").val(link);
+                $(".app_form").find("#image").attr("disabled", true);
+                $(".app_form").find("#image").parent().parent().hide();
+                $("input[name='app_id']").val(id);
+                // $("input[name='old_type']").val(type);
+                $(".app_form").find("button").text("Update");
             });
 
             // Update Type
-            $("#upd_type_form").on("submit", function (e) {
+            $("#upd_app_form").on("submit", function (e) {
                 e.preventDefault();
                 let formData = $(this).serialize();
 
                 $.ajax({
-                    url: "admin/update_acc_type.php",
+                    url: "admin/application.php",
                     method: "post",
                     data: formData,
                     success: function (response) {

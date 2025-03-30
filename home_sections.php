@@ -1,0 +1,162 @@
+<!-- Places -->
+<section class="places">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="bg-primary-custom text-white rounded ps-2 mb-3">Places</h1>
+            </div>
+            <?php
+            $places_Q = $db->query("CALL `get_places`()");
+            if (mysqli_num_rows($places_Q) > 0) {
+                while ($place_ = $places_Q->fetch_object()):
+                    ?>
+                    <div class="col-12 col-md-3 mb-3">
+                        <div class="content position-relative bg-white p-2 rounded">
+                            <div class="img">
+                                <a href="./viewComments.php?place_id=<?= $place_->place_id ?>"
+                                    class="btn btn-sm btn-primary btn-view-rating position-absolute">
+                                    <span>View Comments</span>
+                                </a>
+                                <img src="<?= $place_->place_img ?>" alt="restaurant">
+                            </div>
+                            <hr>
+                            <a href="#!" data-id="<?= $place_->place_id ?>"
+                                class="btn btn-sm btn-success btn-rating position-absolute" data-bs-toggle="modal"
+                                data-bs-target="#addComment">
+                                <span>Give Comments</span>
+                            </a>
+                            <div class="info d-flex align-items-center justify-content-between mt-5">
+                                <h3><?= $place_->city_name ?></h3>
+                                <h5 class="btn btn-sm btn-secondary"><?= $place_->type ?></h5>
+                            </div>
+                            <p>
+                                <?= $place_->description ?>
+                            </p>
+                            <a href="<?= $place_->location ?>" target="_blank" class="btn btn-primary w-100">Location</a>
+                        </div>
+                    </div>
+                <?php endwhile;
+            } else { ?>
+                <div class="col-12">
+                    <h1 class="text-center alert alert-info">No Record Found</h1>
+                </div>
+            <?php }
+            $places_Q->close();
+            $db->next_result(); ?>
+        </div>
+    </div>
+</section>
+<!-- Accommodations -->
+<section class="accommodations">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="bg-primary-custom text-white rounded ps-2 mb-3">Accommodations</h1>
+            </div>
+            <?php
+            $acc_Q = $db->query("CALL `get_acc`()");
+            if (mysqli_num_rows($acc_Q) > 0) {
+                while ($acc_ = $acc_Q->fetch_object()):
+                    $services = explode(",", $acc_->services);
+                    ?>
+                    <div class="col-12 col-md-3 mb-3">
+                        <div class="content bg-white p-2 rounded">
+                            <div class="img">
+                                <img src="<?= $acc_->acc_img ?>" alt="restaurant">
+                            </div>
+                            <hr>
+                            <div class="info d-flex align-items-center justify-content-between">
+                                <h3><?= $acc_->city_name ?></h3>
+                                <h5 class="btn btn-sm btn-secondary"><?= $acc_->type ?></h5>
+                            </div>
+                            <ul>
+                                <?php foreach ($services as $service) {
+                                    echo '<li>' . $service . '</li>';
+                                } ?>
+                            </ul>
+                            <a href="<?= $acc_->location ?>" target="_blank" class="btn btn-primary w-100">Location</a>
+                        </div>
+                    </div>
+                <?php endwhile;
+            } else { ?>
+                <div class="col-12">
+                    <h1 class="text-center alert alert-info">No Record Found</h1>
+                </div>
+            <?php }
+            $acc_Q->close();
+            $db->next_result(); ?>
+        </div>
+    </div>
+</section>
+<!-- Events -->
+<section class="events">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="bg-primary-custom text-white rounded ps-2 mb-3">Events</h1>
+            </div>
+            <?php
+            $event_Q = $db->query("CALL `get_events`()");
+            if (mysqli_num_rows($event_Q) > 0) {
+                while ($event_ = $event_Q->fetch_object()):
+                    ?>
+                    <div class="col-12 col-md-3 mb-3">
+                        <div class="content bg-white p-2 rounded">
+                            <div class="img">
+                                <img src="<?= $event_->event_img ?>" alt="restaurant">
+                            </div>
+                            <hr>
+                            <div class="info d-flex align-items-center justify-content-between">
+                                <h3><?= $event_->event_name ?></h3>
+                                <h5 class="btn btn-sm btn-secondary"><?= $event_->city_name ?></h5>
+                            </div>
+                            <p>
+                                <strong>Event Date: </strong>
+                                <?= date('d-M-Y', strtotime($event_->date)) ?>
+                            </p>
+                            <a href="<?= $event_->booking_link ?>" target="_blank" class="btn btn-primary w-100">Booking
+                                Link</a>
+                        </div>
+                    </div>
+                <?php endwhile;
+            } else { ?>
+                <div class="col-12">
+                    <h1 class="text-center alert alert-info">No Record Found</h1>
+                </div>
+            <?php }
+            $event_Q->close();
+            $db->next_result(); ?>
+        </div>
+    </div>
+</section>
+
+<!-- Useful Applications -->
+<section id="useful-apps" class="useful_apps">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mb-3">
+                <h2 class="bg-primary-custom text-white rounded p-2">Useful Applications</h2>
+            </div>
+            <?php $app_Q = $db->query("CALL `get_apps`()");
+            if (mysqli_num_rows($app_Q) > 0):
+                while ($app = mysqli_fetch_object($app_Q)):
+                    ?>
+                    <div class="col-12 col-md-3 mb-3">
+                        <div class="content p-2 border rounded shadow">
+                            <div class="img">
+                                <img src="<?= $app->image ?>" height="200" width="300" class="rounded"
+                                    alt="app-<?= $app->app_id ?>">
+                            </div>
+                            <hr>
+                            <h5><?= $app->title ?></h5>
+                            <a href="<?= $app->link ?>" class="btn btn-primary btn-sm w-100">Application Link</a>
+                        </div>
+                    </div>
+                <?php endwhile; else: ?>
+                <h1 class="text-center alert alert-info">No Application Found.</h1>
+            <?php endif;
+            $app_Q->close();
+            $db->next_result(); ?>
+        </div>
+    </div>
+</section>
