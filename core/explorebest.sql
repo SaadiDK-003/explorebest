@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2025 at 12:56 AM
+-- Generation Time: Mar 31, 2025 at 12:55 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -77,6 +77,13 @@ FROM accommodation a
 INNER JOIN cities c ON a.city_id=c.id
 WHERE a.u_id=user_id
 ORDER BY a.id DESC$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_apps` ()   SELECT
+app.id AS 'app_id',
+app.title,
+app.link,
+app.image
+FROM applications app$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_cities` ()   SELECT
 *
@@ -232,8 +239,20 @@ CREATE TABLE `accommodation_types` (
 INSERT INTO `accommodation_types` (`id`, `types`) VALUES
 (1, 'apartment'),
 (2, 'chalet'),
-(3, 'hotel'),
-(4, 'test_acc');
+(3, 'hotel');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `applications`
+--
+
+CREATE TABLE `applications` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `link` varbinary(255) NOT NULL,
+  `image` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -366,6 +385,12 @@ ALTER TABLE `accommodation_types`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `applications`
+--
+ALTER TABLE `applications`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `cities`
 --
 ALTER TABLE `cities`
@@ -424,6 +449,12 @@ ALTER TABLE `accommodation_types`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `applications`
+--
+ALTER TABLE `applications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `cities`
 --
 ALTER TABLE `cities`
@@ -451,7 +482,7 @@ ALTER TABLE `places`
 -- AUTO_INCREMENT for table `place_types`
 --
 ALTER TABLE `place_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`

@@ -67,8 +67,9 @@ if ($userRole != 'admin') {
                                         <td>
                                             <a href="#!" data-id="<?= $type->id ?>" data-type="<?= $type->types ?>"
                                                 class="btn btn-sm btn-primary btn-upd-type"><i class="fas fa-pencil"></i></a>
-                                            <a href="#!" data-id="<?= $type->id ?>" data-table="place_types" data-msg="Type"
-                                                class="btn btn-sm btn-danger btn-del"><i class="fas fa-trash"></i></a>
+                                            <a href="#!" data-id="<?= $type->id ?>" data-table="accommodation_types"
+                                                data-msg="Type" class="btn btn-sm btn-danger btn-del"><i
+                                                    class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>
 
