@@ -108,7 +108,9 @@ if ($userRole != 'local') {
                                         <td class="text-center"><?= $event->city_name ?></td>
                                         <td class="text-center"><?= $event->event_name ?></td>
                                         <td class="text-center"><?= $event->date ?></td>
-                                        <td class="text-center"><?= $event->booking_link ?></td>
+                                        <td class="text-center">
+                                            <span><?= $event->booking_link ?></span>
+                                        </td>
                                         <td class="text-center">
                                             <img src="<?= env("SITE_URL") ?><?= $event->event_img ?>" width="80" height="80"
                                                 class="d-block mx-auto rounded" alt="event_<?= $event->event_id ?>">

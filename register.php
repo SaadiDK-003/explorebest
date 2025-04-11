@@ -41,6 +41,16 @@ if (isLoggedIn()) {
                         </div>
                         <div class="col-12 col-md-12 mb-3">
                             <div class="form-group">
+                                <label for="role" class="form-label">Select Role</label>
+                                <select name="role" id="role" class="form-select" required>
+                                    <option value="" selected hidden>Select Option</option>
+                                    <option value="local">Local Guide</option>
+                                    <option value="tourist">Tourist</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12 mb-3">
+                            <div class="form-group">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" name="password" id="password" class="form-control" required>
                             </div>

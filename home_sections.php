@@ -17,6 +17,11 @@
                                     class="btn btn-sm btn-primary btn-view-rating position-absolute">
                                     <span>View Comments</span>
                                 </a>
+                                <a href="#!" data-placeid="<?= $place_->place_id ?>"
+                                    class="btn btn-sm btn-danger btn-add-fav btn-add-fav-place position-absolute">
+                                    <i class="fas fa-heart"></i>
+                                </a>
+
                                 <img src="<?= $place_->place_img ?>" alt="restaurant">
                             </div>
                             <hr>
@@ -61,7 +66,11 @@
                     ?>
                     <div class="col-12 col-md-3 mb-3">
                         <div class="content bg-white p-2 rounded">
-                            <div class="img">
+                            <div class="img position-relative">
+                                <a href="#!" data-acc="<?= $acc_->acc_id ?>"
+                                    class="btn btn-sm btn-danger btn-add-fav btn-add-fav-acc position-absolute">
+                                    <i class="fas fa-heart"></i>
+                                </a>
                                 <img src="<?= $acc_->acc_img ?>" alt="restaurant">
                             </div>
                             <hr>
@@ -102,7 +111,11 @@
                     ?>
                     <div class="col-12 col-md-3 mb-3">
                         <div class="content bg-white p-2 rounded">
-                            <div class="img">
+                            <div class="img position-relative">
+                                <a href="#!" data-event="<?= $event_->event_id ?>"
+                                    class="btn btn-sm btn-danger btn-add-fav btn-add-fav-event position-absolute">
+                                    <i class="fas fa-heart"></i>
+                                </a>
                                 <img src="<?= $event_->event_img ?>" alt="restaurant">
                             </div>
                             <hr>

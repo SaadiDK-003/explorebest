@@ -29,6 +29,7 @@ function register($POST)
       $msg = '';
       $username = $POST['username'];
       $email = $POST['email'];
+      $role = $POST['role'];
       $pwd = $POST['password'];
 
       if (checkEmailExists($email)) {
@@ -37,7 +38,7 @@ function register($POST)
             $msg = '<h5 class="text-center alert alert-danger">Password must be greater than 6 characters.</h5>';
       } else {
             $pwd = md5($pwd);
-            $db->query("INSERT INTO `users` (username,email,password) VALUES('$username','$email','$pwd')");
+            $db->query("INSERT INTO `users` (username,email,password,role) VALUES('$username','$email','$pwd','$role')");
             $msg = '<h5 class="text-center alert alert-success">Successfully Registered.</h5>
             <script>
                   setTimeout(function(){

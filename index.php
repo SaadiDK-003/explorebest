@@ -31,13 +31,14 @@ require_once 'core/database.php';
                                                 Qui dolore esse provident harum minus adipisci facilis hic in.
                                           </p>
                                           <div class="btn-wrapper">
-                                                <a href="#useful-apps" class="btn btn-primary">Useful Applications</a>
+                                                <a href="#useful-apps" class="btn bg-primary-custom text-white">Useful
+                                                      Applications</a>
                                           </div>
                                     </div>
                               </div>
                               <div class="col-12 col-md-6">
                                     <div class="bg-img" data-title="<?= env("TITLE") ?>">
-                                          <img src="./img/explore_bg.webp" alt="explore_bg">
+                                          <img src="./img/bg_2.jpeg" alt="explore_bg">
                                     </div>
                               </div>
                         </div>
@@ -209,6 +210,101 @@ require_once 'core/database.php';
 
                   // Initial update
                   updateCheckedCount();
+
+
+                  // Add to Favorite Places
+                  $(document).on("click", ".btn-add-fav-place", function (e) {
+                        e.preventDefault();
+                        let place_id = $(this).data("placeid");
+
+                        $.ajax({
+                              url: "ajax/add_fav.php",
+                              method: "post",
+                              data: {
+                                    fav_place_id: place_id
+                              },
+                              success: function (response) {
+                                    let res = JSON.parse(response);
+                                    if (res.status == 'success') {
+                                          $("#ToastSuccess").addClass("fade show");
+                                          $("#ToastSuccess .toast-body").html(res.msg);
+                                          setTimeout(() => {
+                                                window.location.reload();
+                                          }, 1500);
+                                    } else {
+                                          $("#ToastDanger").addClass("fade show");
+                                          $("#ToastDanger .toast-body").html(res.msg);
+                                          setTimeout(() => {
+                                                $("#ToastDanger .toast-body").html('');
+                                                $("#ToastDanger").removeClass("fade show");
+                                          }, 1500);
+                                    }
+                              }
+                        })
+                  });
+
+                  // Add to Favorite Accommodation
+                  $(document).on("click", ".btn-add-fav-acc", function (e) {
+                        e.preventDefault();
+                        let acc_id = $(this).data("acc");
+
+                        $.ajax({
+                              url: "ajax/add_fav.php",
+                              method: "post",
+                              data: {
+                                    fav_acc_id: acc_id
+                              },
+                              success: function (response) {
+                                    let res = JSON.parse(response);
+                                    if (res.status == 'success') {
+                                          $("#ToastSuccess").addClass("fade show");
+                                          $("#ToastSuccess .toast-body").html(res.msg);
+                                          setTimeout(() => {
+                                                window.location.reload();
+                                          }, 1500);
+                                    } else {
+                                          $("#ToastDanger").addClass("fade show");
+                                          $("#ToastDanger .toast-body").html(res.msg);
+                                          setTimeout(() => {
+                                                $("#ToastDanger .toast-body").html('');
+                                                $("#ToastDanger").removeClass("fade show");
+                                          }, 1500);
+                                    }
+                              }
+                        })
+                  });
+
+                  // Add to Favorite Events
+                  $(document).on("click", ".btn-add-fav-event", function (e) {
+                        e.preventDefault();
+                        let event_id = $(this).data("event");
+
+                        $.ajax({
+                              url: "ajax/add_fav.php",
+                              method: "post",
+                              data: {
+                                    fav_event_id: event_id
+                              },
+                              success: function (response) {
+                                    let res = JSON.parse(response);
+                                    if (res.status == 'success') {
+                                          $("#ToastSuccess").addClass("fade show");
+                                          $("#ToastSuccess .toast-body").html(res.msg);
+                                          setTimeout(() => {
+                                                window.location.reload();
+                                          }, 1500);
+                                    } else {
+                                          $("#ToastDanger").addClass("fade show");
+                                          $("#ToastDanger .toast-body").html(res.msg);
+                                          setTimeout(() => {
+                                                $("#ToastDanger .toast-body").html('');
+                                                $("#ToastDanger").removeClass("fade show");
+                                          }, 1500);
+                                    }
+                              }
+                        })
+                  });
+
             });
       </script>
 </body>

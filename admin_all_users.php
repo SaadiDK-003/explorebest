@@ -21,74 +21,41 @@ if ($userRole != 'admin') {
             <div class="row">
                 <div class="col-12">
                     <div class="btn_wrapper d-flex justify-content-center gap-2">
-                        <a href="./admin/places.php" class="btn btn-primary">Update Places</a>
-                        <a href="./admin/accommodation.php" class="btn btn-secondary">Update Accommodations</a>
-                        <a href="./admin/events.php" class="btn btn-warning">Update Events</a>
+                        <a href="./adminDashboard.php" class="btn btn-primary">Go Back</a>
                     </div>
                 </div>
             </div>
-            <form id="add_city_form" class="city_form my-4">
-                <div class="row">
-                    <div class="col-12 col-md-3 mx-auto">
-                        <div class="row">
-                            <div class="col-12 mx-auto mb-3">
-                                <div class="form-group">
-                                    <label for="city_name" class="form-label">City Name</label>
-                                    <input type="text" name="city_name" id="city_name" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <div class="form-group d-flex justify-content-end">
-                                    <input type="hidden" name="city_id">
-                                    <button type="submit" class="btn btn-success">Add City</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <div class="row">
+            <div class="row mt-4">
                 <div class="col-12 col-md-5 mx-auto">
-                    <table id="cities"
+                    <table id="users-table"
                         class="table table-bordered table-striped table-responsive text-center align-middle">
                         <thead>
                             <tr>
-                                <th class="text-center">City Name</th>
-                                <th class="text-center">Action</th>
+                                <th class="text-center">Name</th>
+                                <th class="text-center">Email</th>
+                                <th class="text-center">Role</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $cities_Q = $db->query("CALL `get_cities`()");
-                            if ($cities_Q->num_rows > 0):
-                                while ($city = $cities_Q->fetch_object()): ?>
+                            $users__Q = $db->query("CALL `get_all_users`()");
+                            if ($users__Q->num_rows > 0):
+                                while ($type = $users__Q->fetch_object()): ?>
 
                                     <tr>
-                                        <td><?= $city->city_name ?></td>
-                                        <td>
-                                            <a href="#!" data-id="<?= $city->id ?>" data-city="<?= $city->city_name ?>"
-                                                class="btn btn-sm btn-primary btn-upd-city"><i class="fas fa-pencil"></i></a>
-                                            <a href="#!" data-id="<?= $city->id ?>" data-table="cities" data-msg="City"
-                                                class="btn btn-sm btn-danger btn-del"><i class="fas fa-trash"></i></a>
-                                        </td>
+                                        <td><?= $type->username ?></td>
+                                        <td><?= $type->email ?></td>
+                                        <td><?= $type->role ?></td>
                                     </tr>
 
                                     <?php
                                 endwhile;
                             endif;
-                            $cities_Q->close();
+                            $users__Q->close();
                             $db->next_result();
                             ?>
                         </tbody>
                     </table>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-12 text-center">
-                    <a href="./admin_app.php" class="btn btn-primary btn-sm">Applications</a>
-                    <a href="./admin_place_types.php" class="btn btn-secondary btn-sm">Place Types</a>
-                    <a href="./admin_acc_types.php" class="btn btn-warning btn-sm">Accommodation Types</a>
-                    <a href="./admin_all_users.php" class="btn btn-info btn-sm">All Users</a>
                 </div>
             </div>
         </div>
@@ -98,7 +65,7 @@ if ($userRole != 'admin') {
 
     <script>
         $(document).ready(function () {
-            new DataTable("#cities", {
+            new DataTable("#users-table", {
                 info: false,
                 ordering: false,
                 pageLength: 5,
@@ -106,13 +73,14 @@ if ($userRole != 'admin') {
                     topStart: null
                 }
             });
-            // Add City
-            $("#add_city_form").on("submit", function (e) {
+
+            // Add Type
+            $("#add_place_type_form").on("submit", function (e) {
                 e.preventDefault();
                 let formData = $(this).serialize();
 
                 $.ajax({
-                    url: "ajax/city.php",
+                    url: "admin/update_place_type.php",
                     method: "post",
                     data: formData,
                     success: function (response) {
@@ -132,23 +100,24 @@ if ($userRole != 'admin') {
             });
 
 
-            $(document).on("click", ".btn-upd-city", function (e) {
+            $(document).on("click", ".btn-upd-type", function (e) {
                 e.preventDefault();
                 let id = $(this).data("id");
-                let city = $(this).data("city");
-                $(".city_form").attr("id", "upd_city_form");
-                $(".city_form").find("#city_name").attr("name", "city_update").val(city);
-                $("input[name='city_id']").val(id);
-                $(".city_form").find("button").text("Update");
+                let type = $(this).data("type");
+                $(".type_form").attr("id", "upd_type_form");
+                $(".type_form").find("#type").attr("name", "type_update").val(type);
+                $("input[name='place_type_id']").val(id);
+                $("input[name='old_type']").val(type);
+                $(".type_form").find("button").text("Update");
             });
 
-            // Update City
-            $("#upd_city_form").on("submit", function (e) {
+            // Update Type
+            $("#upd_type_form").on("submit", function (e) {
                 e.preventDefault();
                 let formData = $(this).serialize();
 
                 $.ajax({
-                    url: "ajax/city.php",
+                    url: "admin/update_place_type.php",
                     method: "post",
                     data: formData,
                     success: function (response) {
