@@ -44,7 +44,7 @@ if (isLoggedIn()) {
                                 <label for="role" class="form-label">Select Role</label>
                                 <select name="role" id="role" class="form-select" required>
                                     <option value="" selected hidden>Select Option</option>
-                                    <option value="local">Local Guide</option>
+                                    <option value="local">Local Resident</option>
                                     <option value="tourist">Tourist</option>
                                 </select>
                             </div>
