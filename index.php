@@ -38,7 +38,7 @@ require_once 'core/database.php';
                               </div>
                               <div class="col-12 col-md-6">
                                     <div class="bg-img" data-title="<?= env("TITLE") ?>">
-                                          <img src="./img/bg_2.jpeg" alt="explore_bg">
+                                          <img src="./img/bg_2.jpeg" loading="lazy" alt="explore_bg">
                                     </div>
                               </div>
                         </div>
@@ -303,6 +303,26 @@ require_once 'core/database.php';
                                     }
                               }
                         })
+                  });
+
+                  $('.img-wrapper').owlCarousel({
+                        loop: true,
+                        margin: 10,
+                        nav: true,
+                        dots: false,
+                        autoplay: true,
+                        navText: ['<i class="fas fa-circle-chevron-left"></i>', '<i class="fas fa-circle-chevron-right"></i>'],
+                        responsive: {
+                              0: {
+                                    items: 1
+                              },
+                              600: {
+                                    items: 1
+                              },
+                              1000: {
+                                    items: 1
+                              }
+                        }
                   });
 
             });

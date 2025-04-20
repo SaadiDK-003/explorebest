@@ -61,14 +61,21 @@ if ($userRole != 'local') {
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="event_image" class="form-label">Event Image</label>
-                                    <input type="file" name="event_image" id="event_image" class="form-control"
-                                        required>
+                                    <input type="file" multiple name="event_image[]" id="event_image"
+                                        class="form-control" required>
                                 </div>
                             </div>
-                            <div class="col-12 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="booking_link" class="form-label">Booking Link</label>
                                     <input type="text" name="booking_link" id="booking_link" class="form-control"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="text" name="phone" id="phone" class="form-control"
                                         required>
                                 </div>
                             </div>
@@ -102,6 +109,8 @@ if ($userRole != 'local') {
                             if ($events_Q->num_rows > 0):
                                 while ($event = $events_Q->fetch_object()):
                                     $status = $event->status;
+                                    $images = explode(',', $event->event_img);
+                                    $imagesCount = count($images);
                                     ?>
 
                                     <tr>
@@ -111,10 +120,21 @@ if ($userRole != 'local') {
                                         <td class="text-center">
                                             <span><?= $event->booking_link ?></span>
                                         </td>
-                                        <td class="text-center">
-                                            <img src="<?= env("SITE_URL") ?><?= $event->event_img ?>" width="80" height="80"
-                                                class="d-block mx-auto rounded" alt="event_<?= $event->event_id ?>">
-                                        </td>
+
+                                        <?php if ($imagesCount == 1): ?>
+                                            <td class="text-center">
+                                                <img src="<?= env("SITE_URL") ?><?= $images[0] ?>" width="80" height="80"
+                                                    class="d-block mx-auto rounded" alt="place_<?= $event->event_id ?>">
+                                            </td>
+                                        <?php else: ?>
+                                            <td class="img text-center">
+                                                <?php foreach ($images as $image): ?>
+                                                    <img src="<?= env("SITE_URL") ?><?= $image ?>" width="80" height="80"
+                                                        class="d-block mx-auto rounded" alt="place_<?= $event->event_id ?>">
+                                                <?php endforeach; ?>
+                                            </td>
+                                        <?php endif; ?>
+
                                         <td class="text-center">
                                             <?= $status == '0' ? '<span class="btn btn-sm btn-warning">Pending</span>' : '<span class="btn btn-sm btn-success">Active</span>' ?>
                                         </td>
@@ -211,8 +231,8 @@ if ($userRole != 'local') {
                             <div class="col-12 mb-3">
                                 <div class="form-group">
                                     <label for="upd_event_img" class="form-label">Event Image</label>
-                                    <input type="file" name="event_img" id="upd_event_img" class="form-control"
-                                        required>
+                                    <input type="file" multiple name="event_img[]" id="upd_event_img"
+                                        class="form-control" required>
                                 </div>
                             </div>
                         </div>

@@ -45,6 +45,8 @@ if ($userRole != 'tourist') {
                     $places_Q = $db->query("CALL `get_fav_places_by_user_id`($userid)");
                     if (mysqli_num_rows($places_Q) > 0) {
                         while ($place_ = $places_Q->fetch_object()):
+                            $images = explode(',', $place_->place_img);
+                            $imagesCount = count($images);
                             ?>
                             <div class="col-12 col-md-3 mb-3">
                                 <div class="content position-relative bg-white p-2 rounded">
@@ -59,7 +61,15 @@ if ($userRole != 'tourist') {
                                             <i class="fas fa-trash"></i>
                                         </a>
 
-                                        <img src="<?= $place_->place_img ?>" alt="restaurant">
+                                        <?php if ($imagesCount == 1): ?>
+                                            <img src="<?= $place_->place_img ?>" alt="restaurant">
+                                        <?php else: ?>
+                                            <div class="img-wrapper owl-carousel">
+                                                <?php foreach ($images as $image): ?>
+                                                    <img src="<?= $image ?>" alt="restaurant">
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                     <hr>
                                     <a href="#!" data-id="<?= $place_->place_id ?>"
@@ -74,8 +84,12 @@ if ($userRole != 'tourist') {
                                     <p>
                                         <?= $place_->description ?>
                                     </p>
-                                    <a href="<?= $place_->location ?>" target="_blank"
-                                        class="btn btn-primary w-100">Location</a>
+                                    <div class="d-flex gap-2">
+                                        <a href="<?= $place_->location ?>" target="_blank"
+                                            class="btn btn-primary w-75 flex-grow-1">Location</a>
+                                        <a href="tel:<?= $place_->phone ?>" class="btn btn-secondary"><i
+                                                class="fas fa-phone"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         <?php endwhile;
@@ -102,6 +116,8 @@ if ($userRole != 'tourist') {
                     if (mysqli_num_rows($acc_Q) > 0) {
                         while ($acc_ = $acc_Q->fetch_object()):
                             $services = explode(",", $acc_->services);
+                            $images = explode(',', $acc_->acc_img);
+                            $imagesCount = count($images);
                             ?>
                             <div class="col-12 col-md-3 mb-3">
                                 <div class="content bg-white p-2 rounded">
@@ -111,7 +127,15 @@ if ($userRole != 'tourist') {
                                             class="btn btn-sm btn-danger btn-add-fav btn-del position-absolute">
                                             <i class="fas fa-trash"></i>
                                         </a>
-                                        <img src="<?= $acc_->acc_img ?>" alt="restaurant">
+                                        <?php if ($imagesCount == 1): ?>
+                                            <img src="<?= $acc_->acc_img ?>" alt="restaurant">
+                                        <?php else: ?>
+                                            <div class="img-wrapper owl-carousel">
+                                                <?php foreach ($images as $image): ?>
+                                                    <img src="<?= $image ?>" alt="restaurant">
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                     <hr>
                                     <div class="info d-flex align-items-center justify-content-between">
@@ -123,7 +147,12 @@ if ($userRole != 'tourist') {
                                             echo '<li>' . $service . '</li>';
                                         } ?>
                                     </ul>
-                                    <a href="<?= $acc_->location ?>" target="_blank" class="btn btn-primary w-100">Location</a>
+                                    <div class="d-flex gap-2">
+                                        <a href="<?= $acc_->location ?>" target="_blank"
+                                            class="btn btn-primary w-75 flex-grow-1">Location</a>
+                                        <a href="tel:<?= $acc_->phone ?>" class="btn btn-secondary"><i
+                                                class="fas fa-phone"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         <?php endwhile;
@@ -149,6 +178,8 @@ if ($userRole != 'tourist') {
                     $event_Q = $db->query("CALL `get_fav_event_by_user_id`($userid)");
                     if (mysqli_num_rows($event_Q) > 0) {
                         while ($event_ = $event_Q->fetch_object()):
+                            $images = explode(',', $event_->event_img);
+                            $imagesCount = count($images);
                             ?>
                             <div class="col-12 col-md-3 mb-3">
                                 <div class="content bg-white p-2 rounded">
@@ -158,7 +189,15 @@ if ($userRole != 'tourist') {
                                             class="btn btn-sm btn-danger btn-add-fav btn-del position-absolute">
                                             <i class="fas fa-trash"></i>
                                         </a>
-                                        <img src="<?= $event_->event_img ?>" alt="restaurant">
+                                        <?php if ($imagesCount == 1): ?>
+                                            <img src="<?= $event_->event_img ?>" alt="restaurant">
+                                        <?php else: ?>
+                                            <div class="img-wrapper owl-carousel">
+                                                <?php foreach ($images as $image): ?>
+                                                    <img src="<?= $image ?>" alt="restaurant">
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                     <hr>
                                     <div class="info d-flex align-items-center justify-content-between">
@@ -169,8 +208,13 @@ if ($userRole != 'tourist') {
                                         <strong>Event Date: </strong>
                                         <?= date('d-M-Y', strtotime($event_->date)) ?>
                                     </p>
-                                    <a href="<?= $event_->booking_link ?>" target="_blank" class="btn btn-primary w-100">Booking
-                                        Link</a>
+                                    <div class="d-flex gap-2">
+                                        <a href="<?= $event_->booking_link ?>" target="_blank"
+                                            class="btn btn-primary w-75 flex-grow-1">Booking
+                                            Link</a>
+                                        <a href="tel:<?= $event_->phone ?>" class="btn btn-secondary"><i
+                                                class="fas fa-phone"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         <?php endwhile;
@@ -286,6 +330,26 @@ if ($userRole != 'tourist') {
                         }, 1800);
                     }
                 });
+            });
+
+            $('.img-wrapper').owlCarousel({
+                loop: true,
+                margin: 10,
+                nav: true,
+                dots: false,
+                autoplay: true,
+                navText: ['<i class="fas fa-circle-chevron-left"></i>', '<i class="fas fa-circle-chevron-right"></i>'],
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 1
+                    },
+                    1000: {
+                        items: 1
+                    }
+                }
             });
 
         });

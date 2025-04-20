@@ -27,7 +27,7 @@ if ($userRole != 'admin') {
             </div>
             <div class="row mt-4">
                 <div class="col-12 mx-auto">
-                    <table id="places"
+                    <table id="places-table"
                         class="table table-bordered table-striped table-responsive text-center align-middle">
                         <thead>
                             <tr>
@@ -46,6 +46,8 @@ if ($userRole != 'admin') {
                             if ($places_Q->num_rows > 0):
                                 while ($place = $places_Q->fetch_object()):
                                     $status = $place->status;
+                                    $images = explode(',', $place->place_img);
+                                    $imagesCount = count($images);
                                     ?>
 
                                     <tr>
@@ -53,10 +55,19 @@ if ($userRole != 'admin') {
                                         <td class="text-center"><?= $place->type ?></td>
                                         <td class="text-center"><?= $place->location ?></td>
                                         <td class="text-center"><?= $place->description ?></td>
-                                        <td class="text-center">
-                                            <img src="<?= env("SITE_URL") ?><?= $place->place_img ?>" width="80" height="80"
-                                                class="d-block mx-auto rounded" alt="place_<?= $place->place_id ?>">
-                                        </td>
+                                        <?php if ($imagesCount == 1): ?>
+                                            <td class="text-center">
+                                                <img src="<?= env("SITE_URL") ?><?= $images[0] ?>" width="80" height="80"
+                                                    class="d-block mx-auto rounded" alt="place_<?= $place->place_id ?>">
+                                            </td>
+                                        <?php else: ?>
+                                            <td class="img text-center">
+                                                <?php foreach ($images as $image): ?>
+                                                    <img src="<?= env("SITE_URL") ?><?= $image ?>" width="80" height="80"
+                                                        class="d-block mx-auto rounded" alt="place_<?= $place->place_id ?>">
+                                                <?php endforeach; ?>
+                                            </td>
+                                        <?php endif; ?>
                                         <td class="text-center">
                                             <?= $status == '0' ? '<span class="btn btn-sm btn-warning">Pending</span>' : '<span class="btn btn-sm btn-success">Active</span>' ?>
                                         </td>
@@ -121,7 +132,7 @@ if ($userRole != 'admin') {
 
     <script>
         $(document).ready(function () {
-            new DataTable("#places", {
+            new DataTable("#places-table", {
                 ordering: false,
                 pageLength: 5,
                 layout: {

@@ -9,6 +9,8 @@
             $places_Q = $db->query("CALL `get_places`()");
             if (mysqli_num_rows($places_Q) > 0) {
                 while ($place_ = $places_Q->fetch_object()):
+                    $images = explode(',', $place_->place_img);
+                    $imagesCount = count($images);
                     ?>
                     <div class="col-12 col-md-3 mb-3">
                         <div class="content position-relative bg-white p-2 rounded">
@@ -21,8 +23,15 @@
                                     class="btn btn-sm btn-danger btn-add-fav btn-add-fav-place position-absolute">
                                     <i class="fas fa-heart"></i>
                                 </a>
-
-                                <img src="<?= $place_->place_img ?>" alt="restaurant">
+                                <?php if ($imagesCount == 1): ?>
+                                    <img src="<?= $place_->place_img ?>" loading="lazy" alt="restaurant">
+                                <?php else: ?>
+                                    <div class="img-wrapper owl-carousel">
+                                        <?php foreach ($images as $image): ?>
+                                            <img src="<?= $image ?>" loading="lazy" alt="restaurant">
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <hr>
                             <a href="#!" data-id="<?= $place_->place_id ?>"
@@ -37,7 +46,11 @@
                             <p>
                                 <?= $place_->description ?>
                             </p>
-                            <a href="<?= $place_->location ?>" target="_blank" class="btn btn-primary w-100">Location</a>
+                            <div class="d-flex gap-2">
+                                <a href="<?= $place_->location ?>" target="_blank"
+                                    class="btn btn-primary w-75 flex-grow-1">Location</a>
+                                <a href="tel:<?= $place_->phone ?>" class="btn btn-secondary"><i class="fas fa-phone"></i></a>
+                            </div>
                         </div>
                     </div>
                 <?php endwhile;
@@ -63,6 +76,8 @@
             if (mysqli_num_rows($acc_Q) > 0) {
                 while ($acc_ = $acc_Q->fetch_object()):
                     $services = explode(",", $acc_->services);
+                    $images = explode(',', $acc_->acc_img);
+                    $imagesCount = count($images);
                     ?>
                     <div class="col-12 col-md-3 mb-3">
                         <div class="content bg-white p-2 rounded">
@@ -71,7 +86,15 @@
                                     class="btn btn-sm btn-danger btn-add-fav btn-add-fav-acc position-absolute">
                                     <i class="fas fa-heart"></i>
                                 </a>
-                                <img src="<?= $acc_->acc_img ?>" alt="restaurant">
+                                <?php if ($imagesCount == 1): ?>
+                                    <img src="<?= $acc_->acc_img ?>" loading="lazy" alt="restaurant">
+                                <?php else: ?>
+                                    <div class="img-wrapper owl-carousel">
+                                        <?php foreach ($images as $image): ?>
+                                            <img src="<?= $image ?>" loading="lazy" alt="restaurant">
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <hr>
                             <div class="info d-flex align-items-center justify-content-between">
@@ -83,7 +106,11 @@
                                     echo '<li>' . $service . '</li>';
                                 } ?>
                             </ul>
-                            <a href="<?= $acc_->location ?>" target="_blank" class="btn btn-primary w-100">Location</a>
+                            <div class="d-flex gap-2">
+                                <a href="<?= $acc_->location ?>" target="_blank"
+                                    class="btn btn-primary w-75 flex-grow-1">Location</a>
+                                <a href="tel:<?= $acc_->phone ?>" class="btn btn-secondary"><i class="fas fa-phone"></i></a>
+                            </div>
                         </div>
                     </div>
                 <?php endwhile;
@@ -108,6 +135,8 @@
             $event_Q = $db->query("CALL `get_events`()");
             if (mysqli_num_rows($event_Q) > 0) {
                 while ($event_ = $event_Q->fetch_object()):
+                    $images = explode(',', $event_->event_img);
+                    $imagesCount = count($images);
                     ?>
                     <div class="col-12 col-md-3 mb-3">
                         <div class="content bg-white p-2 rounded">
@@ -116,7 +145,15 @@
                                     class="btn btn-sm btn-danger btn-add-fav btn-add-fav-event position-absolute">
                                     <i class="fas fa-heart"></i>
                                 </a>
-                                <img src="<?= $event_->event_img ?>" alt="restaurant">
+                                <?php if ($imagesCount == 1): ?>
+                                    <img src="<?= $event_->event_img ?>" loading="lazy" alt="restaurant">
+                                <?php else: ?>
+                                    <div class="img-wrapper owl-carousel">
+                                        <?php foreach ($images as $image): ?>
+                                            <img src="<?= $image ?>" loading="lazy" alt="restaurant">
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <hr>
                             <div class="info d-flex align-items-center justify-content-between">
@@ -127,8 +164,12 @@
                                 <strong>Event Date: </strong>
                                 <?= date('d-M-Y', strtotime($event_->date)) ?>
                             </p>
-                            <a href="<?= $event_->booking_link ?>" target="_blank" class="btn btn-primary w-100">Booking
-                                Link</a>
+                            <div class="d-flex gap-2">
+                                <a href="<?= $event_->booking_link ?>" target="_blank"
+                                    class="btn btn-primary w-75 flex-grow-1">Booking
+                                    Link</a>
+                                <a href="tel:<?= $event_->phone ?>" class="btn btn-secondary"><i class="fas fa-phone"></i></a>
+                            </div>
                         </div>
                     </div>
                 <?php endwhile;
@@ -157,7 +198,7 @@
                     <div class="col-12 col-md-3 mb-3">
                         <div class="content p-2 border rounded shadow">
                             <div class="img">
-                                <img src="<?= $app->image ?>" height="200" width="300" class="rounded"
+                                <img src="<?= $app->image ?>" height="200" width="300" class="rounded" loading="lazy"
                                     alt="app-<?= $app->app_id ?>">
                             </div>
                             <hr>

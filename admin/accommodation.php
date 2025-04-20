@@ -27,7 +27,7 @@ if ($userRole != 'admin') {
             </div>
             <div class="row mt-4">
                 <div class="col-12 mx-auto">
-                    <table id="places"
+                    <table id="acc-table"
                         class="table table-bordered table-striped table-responsive text-center align-middle">
                         <thead>
                             <tr>
@@ -46,6 +46,8 @@ if ($userRole != 'admin') {
                             if ($acc_Q->num_rows > 0):
                                 while ($acc = $acc_Q->fetch_object()):
                                     $status = $acc->status;
+                                    $images = explode(',', $acc->accommodation_image);
+                                    $imagesCount = count($images);
                                     ?>
 
                                     <tr>
@@ -53,10 +55,19 @@ if ($userRole != 'admin') {
                                         <td class="text-center"><?= $acc->type ?></td>
                                         <td class="text-center"><?= $acc->location ?></td>
                                         <td class="text-center"><?= $acc->services ?></td>
-                                        <td class="text-center">
-                                            <img src="<?= env("SITE_URL") ?><?= $acc->accommodation_image ?>" width="80"
-                                                height="80" class="d-block mx-auto rounded" alt="acc_<?= $acc->acc_id ?>">
-                                        </td>
+                                        <?php if ($imagesCount == 1): ?>
+                                            <td class="text-center">
+                                                <img src="<?= env("SITE_URL") ?><?= $images[0] ?>" width="80" height="80"
+                                                    class="d-block mx-auto rounded" alt="place_<?= $acc->acc_id ?>">
+                                            </td>
+                                        <?php else: ?>
+                                            <td class="img text-center">
+                                                <?php foreach ($images as $image): ?>
+                                                    <img src="<?= env("SITE_URL") ?><?= $image ?>" width="80" height="80"
+                                                        class="d-block mx-auto rounded" alt="place_<?= $acc->acc_id ?>">
+                                                <?php endforeach; ?>
+                                            </td>
+                                        <?php endif; ?>
                                         <td class="text-center">
                                             <?= $status == '0' ? '<span class="btn btn-sm btn-warning">Pending</span>' : '<span class="btn btn-sm btn-success">Active</span>' ?>
                                         </td>
@@ -122,7 +133,7 @@ if ($userRole != 'admin') {
 
     <script>
         $(document).ready(function () {
-            new DataTable("#places", {
+            new DataTable("#acc-table", {
                 ordering: false,
                 pageLength: 5,
                 layout: {
