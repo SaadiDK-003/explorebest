@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 11, 2025 at 11:17 PM
+-- Generation Time: Apr 20, 2025 at 04:55 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -32,6 +32,7 @@ a.type,
 a.location,
 a.accommodation_image AS 'acc_img',
 a.services,
+a.phone,
 a.status
 FROM accommodation a
 INNER JOIN cities c ON a.city_id=c.id
@@ -121,6 +122,7 @@ e.event_name,
 e.date,
 e.booking_link,
 e.event_img,
+e.phone,
 e.status
 FROM events e
 INNER JOIN cities c ON e.city_id=c.id
@@ -170,7 +172,8 @@ a.id AS 'acc_id',
 a.type,
 a.location,
 a.accommodation_image AS 'acc_img',
-a.services
+a.services,
+a.phone
 FROM fav_accommodation fa
 INNER JOIN accommodation a ON fa.acc_id=a.id
 INNER JOIN cities c ON a.city_id=c.id
@@ -182,7 +185,8 @@ c.city_name,
 e.event_name,
 e.event_img,
 e.date,
-e.booking_link
+e.booking_link,
+e.phone
 FROM fav_events fe
 INNER JOIN events e ON fe.event_id=e.id
 INNER JOIN cities c ON e.city_id=c.id
@@ -195,7 +199,8 @@ c.city_name,
 p.type,
 p.location,
 p.place_img,
-p.description
+p.description,
+p.phone
 FROM fav_places fp
 INNER JOIN places p ON fp.place_id=p.id
 INNER JOIN cities c ON p.city_id=c.id
@@ -208,6 +213,7 @@ p.type,
 p.location,
 p.place_img,
 p.description,
+p.phone,
 p.status
 FROM places p
 INNER JOIN cities c ON p.city_id=c.id
@@ -268,6 +274,7 @@ CREATE TABLE `accommodation` (
   `location` varchar(255) NOT NULL,
   `accommodation_image` text DEFAULT NULL,
   `services` text NOT NULL,
+  `phone` varchar(255) DEFAULT NULL,
   `u_id` int(11) NOT NULL,
   `status` enum('0','1') DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -276,9 +283,8 @@ CREATE TABLE `accommodation` (
 -- Dumping data for table `accommodation`
 --
 
-INSERT INTO `accommodation` (`id`, `city_id`, `type`, `location`, `accommodation_image`, `services`, `u_id`, `status`) VALUES
-(1, 2, 'chalet', 'Amet Nam alias ut v', './img/accommodation/explore_bg.webp', 'Voluptate aut nostru', 3, '1'),
-(2, 3, 'hotel', 'https://g.co/kgs/39vddFX', './img/accommodation/hotel.jpg', 'Private parking,Free WiFi', 3, '1');
+INSERT INTO `accommodation` (`id`, `city_id`, `type`, `location`, `accommodation_image`, `services`, `phone`, `u_id`, `status`) VALUES
+(4, 3, 'apartment', 'Beautiful Place', './img/accommodation/1745159559_9019.jpg', 'Private parking,Free WiFi', '057696787899', 3, '1');
 
 -- --------------------------------------------------------
 
@@ -367,6 +373,7 @@ CREATE TABLE `events` (
   `date` date DEFAULT NULL,
   `booking_link` varchar(255) DEFAULT NULL,
   `event_img` text DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
   `u_id` int(11) NOT NULL,
   `status` enum('0','1') NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -375,8 +382,8 @@ CREATE TABLE `events` (
 -- Dumping data for table `events`
 --
 
-INSERT INTO `events` (`id`, `city_id`, `event_name`, `date`, `booking_link`, `event_img`, `u_id`, `status`) VALUES
-(1, 3, 'Maris', '2025-04-18', 'https://google.com', './img/event_/restaurant.jpg', 3, '1');
+INSERT INTO `events` (`id`, `city_id`, `event_name`, `date`, `booking_link`, `event_img`, `phone`, `u_id`, `status`) VALUES
+(3, 2, 'Nora Santos', '2025-04-22', 'https://google.com', './img/event_/1745159491_4422.jpg', '12312345', 3, '1');
 
 -- --------------------------------------------------------
 
@@ -427,6 +434,7 @@ CREATE TABLE `places` (
   `location` varchar(255) NOT NULL,
   `place_img` text DEFAULT NULL,
   `description` text NOT NULL,
+  `phone` varchar(255) DEFAULT NULL,
   `u_id` int(11) NOT NULL,
   `status` enum('0','1') DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -435,8 +443,8 @@ CREATE TABLE `places` (
 -- Dumping data for table `places`
 --
 
-INSERT INTO `places` (`id`, `city_id`, `type`, `location`, `place_img`, `description`, `u_id`, `status`) VALUES
-(14, 2, 'restaurant', 'public_html', './img/place/restaurant.jpg', 'good coffee that is perfect for work :D', 3, '1');
+INSERT INTO `places` (`id`, `city_id`, `type`, `location`, `place_img`, `description`, `phone`, `u_id`, `status`) VALUES
+(24, 2, 'cafe', 'https://g.co/kgs/39vddFX', './img/place/1745159413_9817.jpeg,./img/place/1745159413_6119.webp,./img/place/1745159413_2697.jpg,./img/place/1745159413_7117.jpg', 'good coffee that is perfect for work :D', '12312345', 3, '1');
 
 -- --------------------------------------------------------
 
@@ -582,7 +590,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `accommodation`
 --
 ALTER TABLE `accommodation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `accommodation_types`
@@ -606,37 +614,37 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `fav_accommodation`
 --
 ALTER TABLE `fav_accommodation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `fav_events`
 --
 ALTER TABLE `fav_events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `fav_places`
 --
 ALTER TABLE `fav_places`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `places`
 --
 ALTER TABLE `places`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `place_types`
