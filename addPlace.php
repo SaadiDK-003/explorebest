@@ -78,8 +78,7 @@ if ($userRole != 'local') {
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="phone" class="form-label">Phone</label>
-                                    <input type="text" name="phone" id="phone" class="form-control"
-                                        required>
+                                    <input type="text" name="phone" id="phone" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -201,11 +200,17 @@ if ($userRole != 'local') {
                                     <input type="text" name="location" id="upd_location" class="form-control" required>
                                 </div>
                             </div>
-                            <div class="col-12 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="upd_description" class="form-label">Description</label>
                                     <input type="text" name="description" id="upd_description" class="form-control"
                                         required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_phone" class="form-label">Phone</label>
+                                    <input type="text" name="phone" id="upd_phone" class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -234,8 +239,8 @@ if ($userRole != 'local') {
                             <div class="col-12 mb-3">
                                 <div class="form-group">
                                     <label for="upd_place_img" class="form-label">Place Image</label>
-                                    <input type="file" multiple name="place_image[]" id="upd_place_img" class="form-control"
-                                        required>
+                                    <input type="file" multiple name="place_image[]" id="upd_place_img"
+                                        class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -282,6 +287,7 @@ if ($userRole != 'local') {
                         $("#upd_type").children('option[selected]').val(res.type).text(res.type);
                         $("#upd_location").val(res.location);
                         $("#upd_description").val(res.description);
+                        $("#upd_phone").val(res.phone);
                     }
                 });
             });

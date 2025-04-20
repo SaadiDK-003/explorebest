@@ -49,7 +49,9 @@
                             <div class="d-flex gap-2">
                                 <a href="<?= $place_->location ?>" target="_blank"
                                     class="btn btn-primary w-75 flex-grow-1">Location</a>
-                                <a href="tel:<?= $place_->phone ?>" class="btn btn-secondary"><i class="fas fa-phone"></i></a>
+                                <a href="tel:<?= $place_->phone ?>" data-bs-toggle="tooltip"
+                                    data-bs-title="<?= $place_->phone ?>" class="btn btn-secondary"><i
+                                        class="fas fa-phone"></i></a>
                             </div>
                         </div>
                     </div>
@@ -109,7 +111,8 @@
                             <div class="d-flex gap-2">
                                 <a href="<?= $acc_->location ?>" target="_blank"
                                     class="btn btn-primary w-75 flex-grow-1">Location</a>
-                                <a href="tel:<?= $acc_->phone ?>" class="btn btn-secondary"><i class="fas fa-phone"></i></a>
+                                <a href="tel:<?= $acc_->phone ?>" data-bs-toggle="tooltip" data-bs-title="<?= $acc_->phone ?>"
+                                    class="btn btn-secondary"><i class="fas fa-phone"></i></a>
                             </div>
                         </div>
                     </div>
@@ -168,7 +171,9 @@
                                 <a href="<?= $event_->booking_link ?>" target="_blank"
                                     class="btn btn-primary w-75 flex-grow-1">Booking
                                     Link</a>
-                                <a href="tel:<?= $event_->phone ?>" class="btn btn-secondary"><i class="fas fa-phone"></i></a>
+                                <a href="tel:<?= $event_->phone ?>" data-bs-toggle="tooltip"
+                                    data-bs-title="<?= $event_->phone ?>" class="btn btn-secondary"><i
+                                        class="fas fa-phone"></i></a>
                             </div>
                         </div>
                     </div>

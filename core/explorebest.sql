@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2025 at 04:55 PM
+-- Generation Time: Apr 20, 2025 at 07:57 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -57,7 +57,8 @@ c.id AS 'city_id',
 c.city_name,
 a.type,
 a.location,
-a.services
+a.services,
+a.phone
 FROM accommodation a
 INNER JOIN cities c ON a.city_id=c.id
 WHERE a.id=acc_id$$
@@ -160,7 +161,8 @@ c.id AS 'city_id',
 c.city_name,
 e.event_name,
 e.date,
-e.booking_link
+e.booking_link,
+e.phone
 FROM events e
 INNER JOIN cities c ON e.city_id=c.id
 WHERE e.id=event_id$$
@@ -238,7 +240,8 @@ c.id AS 'city_id',
 c.city_name,
 p.type,
 p.location,
-p.description
+p.description,
+p.phone
 FROM places p
 INNER JOIN cities c ON p.city_id=c.id
 WHERE p.id=place_id$$
@@ -383,7 +386,7 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `city_id`, `event_name`, `date`, `booking_link`, `event_img`, `phone`, `u_id`, `status`) VALUES
-(3, 2, 'Nora Santos', '2025-04-22', 'https://google.com', './img/event_/1745159491_4422.jpg', '12312345', 3, '1');
+(3, 2, 'Nora Santos', '2025-04-22', 'https://google.com', './img/event_/1745159491_4422.jpg', '123123456', 3, '1');
 
 -- --------------------------------------------------------
 
@@ -444,7 +447,7 @@ CREATE TABLE `places` (
 --
 
 INSERT INTO `places` (`id`, `city_id`, `type`, `location`, `place_img`, `description`, `phone`, `u_id`, `status`) VALUES
-(24, 2, 'cafe', 'https://g.co/kgs/39vddFX', './img/place/1745159413_9817.jpeg,./img/place/1745159413_6119.webp,./img/place/1745159413_2697.jpg,./img/place/1745159413_7117.jpg', 'good coffee that is perfect for work :D', '12312345', 3, '1');
+(24, 2, 'cafe', 'https://g.co/kgs/39vddFX', './img/place/1745159413_9817.jpeg,./img/place/1745159413_6119.webp,./img/place/1745159413_2697.jpg,./img/place/1745159413_7117.jpg', 'good coffee that is perfect for work :D', '1231234511', 3, '1');
 
 -- --------------------------------------------------------
 

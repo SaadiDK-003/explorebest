@@ -75,8 +75,7 @@ if ($userRole != 'local') {
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="phone" class="form-label">Phone</label>
-                                    <input type="text" name="phone" id="phone" class="form-control"
-                                        required>
+                                    <input type="text" name="phone" id="phone" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -197,11 +196,17 @@ if ($userRole != 'local') {
                                     <input type="date" name="date" id="upd_date" class="form-control" required>
                                 </div>
                             </div>
-                            <div class="col-12 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="upd_booking_link" class="form-label">Booking Link</label>
                                     <input type="text" name="booking_link" id="upd_booking_link" class="form-control"
                                         required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_phone" class="form-label">Phone</label>
+                                    <input type="text" name="phone" id="upd_phone" class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -279,6 +284,7 @@ if ($userRole != 'local') {
                         $("#upd_event_name").val(res.event_name);
                         $("#upd_date").val(res.date);
                         $("#upd_booking_link").val(res.booking_link);
+                        $("#upd_phone").val(res.phone);
                     }
                 });
 

@@ -199,10 +199,16 @@ if ($userRole != 'local') {
                                     <input type="text" name="location" id="upd_location" class="form-control" required>
                                 </div>
                             </div>
-                            <div class="col-12 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="upd_services" class="form-label">Services</label>
                                     <input type="text" name="services" id="upd_services" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="upd_phone" class="form-label">Phone</label>
+                                    <input type="text" name="phone" id="upd_phone" class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -281,6 +287,7 @@ if ($userRole != 'local') {
                         $("#upd_type").children('option[selected]').val(res.type).text(res.type);
                         $("#upd_location").val(res.location);
                         $("#upd_services").val(res.services);
+                        $("#upd_phone").val(res.phone);
                     }
                 });
 
