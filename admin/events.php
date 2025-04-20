@@ -27,7 +27,7 @@ if ($userRole != 'admin') {
             </div>
             <div class="row mt-4">
                 <div class="col-12 mx-auto">
-                    <table id="places"
+                    <table id="event-table"
                         class="table table-bordered table-striped table-responsive text-center align-middle">
                         <thead>
                             <tr>
@@ -46,6 +46,8 @@ if ($userRole != 'admin') {
                             if ($events_Q->num_rows > 0):
                                 while ($event = $events_Q->fetch_object()):
                                     $status = $event->status;
+                                    $images = explode(',', $event->event_img);
+                                    $imagesCount = count($images);
                                     ?>
 
                                     <tr>
@@ -53,10 +55,21 @@ if ($userRole != 'admin') {
                                         <td class="text-center"><?= $event->event_name ?></td>
                                         <td class="text-center"><?= $event->date ?></td>
                                         <td class="text-center"><?= $event->booking_link ?></td>
-                                        <td class="text-center">
-                                            <img src="<?= env("SITE_URL") ?><?= $event->event_img ?>" width="80" height="80"
-                                                class="d-block mx-auto rounded" alt="event_<?= $event->event_id ?>">
-                                        </td>
+
+                                        <?php if ($imagesCount == 1): ?>
+                                            <td class="text-center">
+                                                <img src="<?= env("SITE_URL") ?><?= $images[0] ?>" width="80" height="80"
+                                                    class="d-block mx-auto rounded" alt="place_<?= $event->event_id ?>">
+                                            </td>
+                                        <?php else: ?>
+                                            <td class="img text-center">
+                                                <?php foreach ($images as $image): ?>
+                                                    <img src="<?= env("SITE_URL") ?><?= $image ?>" width="80" height="80"
+                                                        class="d-block mx-auto rounded" alt="place_<?= $event->event_id ?>">
+                                                <?php endforeach; ?>
+                                            </td>
+                                        <?php endif; ?>
+
                                         <td class="text-center">
                                             <?= $status == '0' ? '<span class="btn btn-sm btn-warning">Pending</span>' : '<span class="btn btn-sm btn-success">Active</span>' ?>
                                         </td>
@@ -121,7 +134,7 @@ if ($userRole != 'admin') {
 
     <script>
         $(document).ready(function () {
-            new DataTable("#places", {
+            new DataTable("#event-table", {
                 ordering: false,
                 pageLength: 5,
                 layout: {

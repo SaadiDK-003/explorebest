@@ -113,145 +113,195 @@ function AccommodationTypes()
       $db->next_result();
 }
 
-function addPlace($POST, $FILE, $userid)
+function addPlace($POST, $FILES, $userid)
 {
       global $db;
       $targetDir = './img/place/';
-      $keys = '';
-      $values = '';
       $msg = '';
 
       try {
+            // Check if multiple images are provided
+            if (!empty($FILES["place_image"]["name"][0])) {
 
-            if (!empty($FILE["place_image"]["name"])) {
+                  $uploadedImages = [];
 
-                  $fileName = basename($FILE["place_image"]["name"]);
-                  $targetFilePath = $targetDir . $fileName;
-                  $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+                  // Loop through all uploaded images
+                  foreach ($FILES["place_image"]["name"] as $index => $fileName) {
+                        $fileTmpPath = $FILES["place_image"]["tmp_name"][$index];
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
+                        $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
 
-                  $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
-                  if (in_array($fileType, $allowTypes)) {
-                        if (move_uploaded_file($FILE["place_image"]["tmp_name"], $targetFilePath)) {
-                              foreach ($POST as $key => $value) {
-                                    $keys .= $key . ',';
-                                    $values .= "'" . $value . "',";
+                        if (in_array(strtolower($fileType), $allowTypes)) {
+                              $uniqueName = time() . '_' . rand(1000, 9999) . '.' . $fileType;
+                              $targetFilePath = $targetDir . $uniqueName;
+
+                              if (move_uploaded_file($fileTmpPath, $targetFilePath)) {
+                                    $uploadedImages[] = $targetFilePath;
                               }
+                        }
+                  }
 
-                              // $keys = substr($keys, 0, -1);
-                              // $values = substr($values, 0, -1);
-                              $keys .= 'place_img,u_id';
-                              $values .= "'" . $targetFilePath . "','" . $userid . "'";
+                  if (!empty($uploadedImages)) {
+                        $keys = '';
+                        $values = '';
 
-                              $placesQ = $db->query("INSERT INTO `places` ($keys) VALUES($values)");
-                              if ($placesQ) {
-                                    $msg = '<h5 class="alert alert-success text-center">Place Added Successfully.</h5>';
-                              }
+                        foreach ($POST as $key => $value) {
+                              $keys .= $key . ',';
+                              $values .= "'" . mysqli_real_escape_string($db, $value) . "',";
+                        }
+
+                        // Join all image paths as comma-separated string
+                        $imagePaths = implode(',', $uploadedImages);
+                        $keys .= 'place_img,u_id';
+                        $values .= "'" . $imagePaths . "','" . $userid . "'";
+
+                        $placesQ = $db->query("INSERT INTO `places` ($keys) VALUES($values)");
+                        if ($placesQ) {
+                              $msg = '<h5 class="alert alert-success text-center">Place Added Successfully with multiple images.</h5>';
                         } else {
-                              $msg = '<h5 class="alert alert-danger text-center">Something wrong while uploading file.</h5>';
+                              $msg = '<h5 class="alert alert-danger text-center">Database insert failed.</h5>';
                         }
                   } else {
                         $msg = '<h5 class="alert alert-danger text-center">Only jpg, png, jpeg and webp are allowed.</h5>';
                   }
+            } else {
+                  $msg = '<h5 class="alert alert-warning text-center">Please select at least one image to upload.</h5>';
             }
 
       } catch (\Throwable $th) {
-            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 115.</h5>';
+            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number ' . __LINE__ . '.</h5>';
       }
 
       echo $msg;
 }
 
-function addAccommodation($POST, $FILE, $userid)
+
+function addAccommodation($POST, $FILES, $userid)
 {
       global $db;
       $targetDir = './img/accommodation/';
-      $keys = '';
-      $values = '';
       $msg = '';
 
       try {
+            if (!empty($FILES["acc_image"]["name"][0])) {
 
-            if (!empty($FILE["acc_image"]["name"])) {
-
-                  $fileName = basename($FILE["acc_image"]["name"]);
-                  $targetFilePath = $targetDir . $fileName;
-                  $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-
+                  $uploadedImages = [];
                   $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
-                  if (in_array($fileType, $allowTypes)) {
-                        if (move_uploaded_file($FILE["acc_image"]["tmp_name"], $targetFilePath)) {
-                              foreach ($POST as $key => $value) {
-                                    $keys .= $key . ',';
-                                    $values .= "'" . $value . "',";
-                              }
 
-                              $keys .= 'accommodation_image,u_id';
-                              $values .= "'" . $targetFilePath . "','" . $userid . "'";
+                  foreach ($FILES["acc_image"]["name"] as $index => $fileName) {
+                        $fileTmpPath = $FILES["acc_image"]["tmp_name"][$index];
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
-                              $placesQ = $db->query("INSERT INTO `accommodation` ($keys) VALUES($values)");
-                              if ($placesQ) {
-                                    $msg = '<h5 class="alert alert-success text-center">Place Added Successfully.</h5>';
+                        if (in_array(strtolower($fileType), $allowTypes)) {
+                              $uniqueName = time() . '_' . rand(1000, 9999) . '.' . $fileType;
+                              $targetFilePath = $targetDir . $uniqueName;
+
+                              if (move_uploaded_file($fileTmpPath, $targetFilePath)) {
+                                    $uploadedImages[] = $targetFilePath;
                               }
-                        } else {
-                              $msg = '<h5 class="alert alert-danger text-center">Something wrong while uploading file.</h5>';
                         }
+                  }
+
+                  if (!empty($uploadedImages)) {
+                        $keys = '';
+                        $values = '';
+
+                        foreach ($POST as $key => $value) {
+                              $keys .= $key . ',';
+                              $values .= "'" . mysqli_real_escape_string($db, $value) . "',";
+                        }
+
+                        // Join image paths with commas
+                        $imagePaths = implode(',', $uploadedImages);
+                        $keys .= 'accommodation_image,u_id';
+                        $values .= "'" . $imagePaths . "','" . $userid . "'";
+
+                        $insertQ = $db->query("INSERT INTO `accommodation` ($keys) VALUES($values)");
+
+                        if ($insertQ) {
+                              $msg = '<h5 class="alert alert-success text-center">Accommodation Added Successfully with multiple images.</h5>';
+                        } else {
+                              $msg = '<h5 class="alert alert-danger text-center">Database insert failed.</h5>';
+                        }
+
                   } else {
                         $msg = '<h5 class="alert alert-danger text-center">Only jpg, png, jpeg and webp are allowed.</h5>';
                   }
+
+            } else {
+                  $msg = '<h5 class="alert alert-warning text-center">Please select at least one image to upload.</h5>';
             }
 
       } catch (\Throwable $th) {
-            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 163.</h5>';
+            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number ' . __LINE__ . '.</h5>';
       }
 
       echo $msg;
 }
 
-function addEvent($POST, $FILE, $userid)
+
+function addEvent($POST, $FILES, $userid)
 {
       global $db;
       $targetDir = './img/event_/';
-      $keys = '';
-      $values = '';
       $msg = '';
 
       try {
+            if (!empty($FILES["event_image"]["name"][0])) {
 
-            if (!empty($FILE["event_image"]["name"])) {
-
-                  $fileName = basename($FILE["event_image"]["name"]);
-                  $targetFilePath = $targetDir . $fileName;
-                  $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-
+                  $uploadedImages = [];
                   $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
-                  if (in_array($fileType, $allowTypes)) {
-                        if (move_uploaded_file($FILE["event_image"]["tmp_name"], $targetFilePath)) {
-                              foreach ($POST as $key => $value) {
-                                    $keys .= $key . ',';
-                                    $values .= "'" . $value . "',";
-                              }
 
-                              $keys .= 'event_img,u_id';
-                              $values .= "'" . $targetFilePath . "','" . $userid . "'";
+                  foreach ($FILES["event_image"]["name"] as $index => $fileName) {
+                        $fileTmpPath = $FILES["event_image"]["tmp_name"][$index];
+                        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
-                              $placesQ = $db->query("INSERT INTO `events` ($keys) VALUES($values)");
-                              if ($placesQ) {
-                                    $msg = '<h5 class="alert alert-success text-center">Event Added Successfully.</h5>';
+                        if (in_array(strtolower($fileType), $allowTypes)) {
+                              $uniqueName = time() . '_' . rand(1000, 9999) . '.' . $fileType;
+                              $targetFilePath = $targetDir . $uniqueName;
+
+                              if (move_uploaded_file($fileTmpPath, $targetFilePath)) {
+                                    $uploadedImages[] = $targetFilePath;
                               }
-                        } else {
-                              $msg = '<h5 class="alert alert-danger text-center">Something wrong while uploading file.</h5>';
                         }
+                  }
+
+                  if (!empty($uploadedImages)) {
+                        $keys = '';
+                        $values = '';
+
+                        foreach ($POST as $key => $value) {
+                              $keys .= $key . ',';
+                              $values .= "'" . mysqli_real_escape_string($db, $value) . "',";
+                        }
+
+                        $imagePaths = implode(',', $uploadedImages);
+                        $keys .= 'event_img,u_id';
+                        $values .= "'" . $imagePaths . "','" . $userid . "'";
+
+                        $insertQ = $db->query("INSERT INTO `events` ($keys) VALUES($values)");
+
+                        if ($insertQ) {
+                              $msg = '<h5 class="alert alert-success text-center">Event Added Successfully with multiple images.</h5>';
+                        } else {
+                              $msg = '<h5 class="alert alert-danger text-center">Database insert failed.</h5>';
+                        }
+
                   } else {
                         $msg = '<h5 class="alert alert-danger text-center">Only jpg, png, jpeg and webp are allowed.</h5>';
                   }
+
+            } else {
+                  $msg = '<h5 class="alert alert-warning text-center">Please select at least one image to upload.</h5>';
             }
 
       } catch (\Throwable $th) {
-            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number 209.</h5>';
+            $msg = '<h5 class="alert alert-danger text-center">Something went wrong, check functions file line number ' . __LINE__ . '.</h5>';
       }
 
       echo $msg;
 }
+
 
 function checkPlaceTypeExist($type, $table)
 {

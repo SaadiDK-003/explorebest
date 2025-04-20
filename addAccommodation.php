@@ -64,7 +64,8 @@ if ($userRole != 'local') {
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="acc_image" class="form-label">Accommodation Image</label>
-                                    <input type="file" name="acc_image" id="acc_image" class="form-control" required>
+                                    <input type="file" multiple name="acc_image[]" id="acc_image" class="form-control"
+                                        required>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 mb-3">
@@ -73,6 +74,12 @@ if ($userRole != 'local') {
                                     <input type="text" name="services" id="services" class="form-control"
                                         placeholder="e.g. wifi,parking" required>
                                     <code>Write Services comma separated</code>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="text" name="phone" id="phone" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -105,6 +112,8 @@ if ($userRole != 'local') {
                             if ($acc_Q->num_rows > 0):
                                 while ($acc = $acc_Q->fetch_object()):
                                     $status = $acc->status;
+                                    $images = explode(',', $acc->accommodation_image);
+                                    $imagesCount = count($images);
                                     ?>
 
                                     <tr>
@@ -112,10 +121,20 @@ if ($userRole != 'local') {
                                         <td class="text-center"><?= $acc->type ?></td>
                                         <td class="text-center"><?= $acc->location ?></td>
                                         <td class="text-center"><?= $acc->services ?></td>
-                                        <td class="text-center">
-                                            <img src="<?= env("SITE_URL") ?><?= $acc->accommodation_image ?>" width="80"
-                                                height="80" class="d-block mx-auto rounded" alt="acc_<?= $acc->acc_id ?>">
-                                        </td>
+
+                                        <?php if ($imagesCount == 1): ?>
+                                            <td class="text-center">
+                                                <img src="<?= env("SITE_URL") ?><?= $images[0] ?>" width="80" height="80"
+                                                    class="d-block mx-auto rounded" alt="place_<?= $acc->acc_id ?>">
+                                            </td>
+                                        <?php else: ?>
+                                            <td class="img text-center">
+                                                <?php foreach ($images as $image): ?>
+                                                    <img src="<?= env("SITE_URL") ?><?= $image ?>" width="80" height="80"
+                                                        class="d-block mx-auto rounded" alt="place_<?= $acc->acc_id ?>">
+                                                <?php endforeach; ?>
+                                            </td>
+                                        <?php endif; ?>
                                         <td class="text-center">
                                             <?= $status == '0' ? '<span class="btn btn-sm btn-warning">Pending</span>' : '<span class="btn btn-sm btn-success">Active</span>' ?>
                                         </td>
@@ -213,8 +232,8 @@ if ($userRole != 'local') {
                             <div class="col-12 mb-3">
                                 <div class="form-group">
                                     <label for="upd_acc_img" class="form-label">Accommodation Image</label>
-                                    <input type="file" name="accommodation_image" id="upd_acc_img" class="form-control"
-                                        required>
+                                    <input type="file" multiple name="accommodation_image[]" id="upd_acc_img"
+                                        class="form-control" required>
                                 </div>
                             </div>
                         </div>
